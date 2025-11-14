@@ -1,6 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Github, ChevronDown } from "lucide-react";
 import heroBackground from "@/assets/hero-background.png";
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 const Hero = () => {
   return (
@@ -37,7 +39,7 @@ const Hero = () => {
                 Read Documentation
                 <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
               </Button>
-              <Button size="lg" variant="outline" className="text-base rounded-full border-white/20 hover:bg-white/10 text-white">
+              <Button size="lg" variant="outline" className="text-base rounded-full bg-transparent border-white/40 hover:bg-white/10 hover:border-white/60 text-white">
                 <Github className="w-4 h-4 mr-2" />
                 GitHub
               </Button>
@@ -46,7 +48,7 @@ const Hero = () => {
 
           {/* Right column - Code */}
           <div className="lg:pl-8">
-            <div className="bg-foreground rounded-lg shadow-2xl border border-white/10 overflow-hidden">
+            <div className="bg-foreground rounded-2xl shadow-2xl border border-white/10 overflow-hidden">
               {/* Terminal window controls */}
               <div className="bg-foreground/90 px-4 py-3 flex items-center gap-2 border-b border-white/10">
                 <div className="w-3 h-3 rounded-full bg-red-500" />
@@ -55,9 +57,22 @@ const Hero = () => {
               </div>
               
               {/* Terminal content */}
-              <div className="p-8">
-                <pre className="text-sm font-mono leading-relaxed overflow-x-auto">
-                  <code className="text-white">
+              <div className="p-6">
+                <SyntaxHighlighter
+                  language="typescript"
+                  style={vscDarkPlus}
+                  customStyle={{
+                    background: 'transparent',
+                    padding: 0,
+                    margin: 0,
+                    fontSize: '0.875rem',
+                  }}
+                  codeTagProps={{
+                    style: {
+                      fontFamily: 'monospace',
+                    }
+                  }}
+                >
 {`await peercert.issue({
   certificateType: Utils.toBase64(
     Utils.toArray('employment', 'utf8')
@@ -68,8 +83,7 @@ const Hero = () => {
     company: 'Project Babbage'
   }
 })`}
-                  </code>
-                </pre>
+                </SyntaxHighlighter>
               </div>
             </div>
           </div>
