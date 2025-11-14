@@ -54,21 +54,7 @@ const Hero = () => {
               
               <pre className="text-sm font-mono leading-relaxed overflow-x-auto">
                 <code className="text-white/90">
-{`npm install peercert
-
-import { PeerCert } from 'peercert'
-
-const peercert = new PeerCert()
-
-await peercert.issue({
-  certificateType: 'employment',
-  subjectIdentityKey: peer,
-  fields: {
-    role: 'Engineer',
-    company: 'ACME Corp'
-  },
-  autoSend: true
-})`}
+{`npm install peercert`}
                 </code>
               </pre>
             </div>
