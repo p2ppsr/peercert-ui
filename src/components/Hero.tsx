@@ -3,6 +3,7 @@ import { ArrowRight, Github, ChevronDown } from "lucide-react";
 import heroBackground from "@/assets/hero-background.png";
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { Link } from "react-router-dom";
 const Hero = () => {
   return <section className="relative min-h-screen flex items-center px-6 py-32 overflow-hidden">
       {/* Background Image */}
@@ -37,9 +38,11 @@ const Hero = () => {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button size="lg" className="text-base group rounded-full">
-                Read Documentation
-                <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+              <Button size="lg" className="text-base group rounded-full" asChild>
+                <Link to="/docs" onClick={() => window.scrollTo({ top: 0, behavior: 'instant' })}>
+                  Read Documentation
+                  <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                </Link>
               </Button>
             </div>
           </div>
