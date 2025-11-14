@@ -26,26 +26,22 @@ const CTA = () => {
               <div className="w-3 h-3 rounded-full bg-red-500" />
               <div className="w-3 h-3 rounded-full bg-yellow-500" />
               <div className="w-3 h-3 rounded-full bg-green-500" />
-              <span className="ml-3 text-sm text-background/60 font-mono">Terminal</span>
+              <span className="ml-3 text-sm text-background/60 font-mono">
+            </span>
             </div>
             
             {/* Code content */}
             <div className="p-6">
-              <SyntaxHighlighter 
-                language="bash" 
-                style={vscDarkPlus}
-                customStyle={{
-                  background: 'transparent',
-                  padding: 0,
-                  margin: 0,
-                  fontSize: '0.875rem'
-                }}
-                codeTagProps={{
-                  style: {
-                    fontFamily: 'monospace'
-                  }
-                }}
-              >
+              <SyntaxHighlighter language="bash" style={vscDarkPlus} customStyle={{
+              background: 'transparent',
+              padding: 0,
+              margin: 0,
+              fontSize: '0.875rem'
+            }} codeTagProps={{
+              style: {
+                fontFamily: 'monospace'
+              }
+            }}>
                 {`npm install peercert
 
 import { PeerCert } from 'peercert'`}
