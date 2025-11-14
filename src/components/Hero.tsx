@@ -41,10 +41,6 @@ const Hero = () => {
                 Read Documentation
                 <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
               </Button>
-              <Button size="lg" variant="outline" className="text-base rounded-full bg-transparent border-white/40 hover:bg-white/10 hover:border-white/60 text-white">
-                <Github className="w-4 h-4 mr-2" />
-                GitHub
-              </Button>
             </div>
           </div>
 
