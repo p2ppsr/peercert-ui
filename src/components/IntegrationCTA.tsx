@@ -114,16 +114,6 @@ const IntegrationCTA = () => {
                     </ul>
                   </div>
                 </div>
-
-                <div className="bg-accent/10 rounded-lg p-4">
-                  <p className="text-sm font-light text-center">
-                    
-                    <br />
-                    <span className="text-muted-foreground">
-                      to securely manage their credentials
-                    </span>
-                  </p>
-                </div>
               </div>
             </div>
 
