@@ -1,73 +1,62 @@
-import { MessageSquare, Shield, Zap, Lock, CheckCircle, Network } from "lucide-react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-
 const features = [
   {
-    icon: MessageSquare,
+    number: "01",
     title: "Direct Issuance",
-    description: "Issue certificates directly from one peer to another without any central authority or server infrastructure."
+    description: "Certificate exchange happens directly between peers. No central authority, no server infrastructure, no middleman taking a cut or controlling your data."
   },
   {
-    icon: Network,
-    title: "MessageBox Integration",
-    description: "Built-in MessageBox support for seamless certificate delivery with automatic sending and real-time listening."
-  },
-  {
-    icon: Lock,
-    title: "Selective Disclosure",
-    description: "Create verifiable certificates revealing only selected fields while keeping other information private."
-  },
-  {
-    icon: Shield,
+    number: "02",
     title: "Cryptographic Verification",
-    description: "Full signature verification using BSV identity keys ensures authenticity and prevents tampering."
+    description: "Every certificate is cryptographically signed using BSV identity keys. Tamper-proof, verifiable, and built on proven cryptographic primitives."
   },
   {
-    icon: CheckCircle,
-    title: "Certificate Revocation",
-    description: "DID-based revocation system lets issuers revoke certificates with automatic checking capabilities."
+    number: "03",
+    title: "Selective Disclosure",
+    description: "Reveal only what matters. Create verifiable certificates that expose selected fields while keeping everything else encrypted and private."
   },
   {
-    icon: Zap,
-    title: "No Server Required",
-    description: "Completely peer-to-peer architecture eliminates the need for centralized certificate authority servers."
+    number: "04",
+    title: "Built-in Revocation",
+    description: "DID-based revocation system on the BSV blockchain. Issuers can revoke certificates, verifiers can check status automatically."
   }
 ];
 
 const Features = () => {
   return (
-    <section className="py-24 px-6 relative">
+    <section className="py-32 px-6 bg-muted/30">
       <div className="max-w-7xl mx-auto">
-        {/* Section header */}
-        <div className="text-center mb-16 animate-fade-in">
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            Powerful Features for Modern Trust Networks
-          </h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Everything you need to build decentralized certificate systems without the complexity
+        {/* Header */}
+        <div className="mb-24">
+          <p className="text-sm uppercase tracking-wider text-muted-foreground mb-4 font-medium">
+            Features
           </p>
+          <h2 className="font-serif text-5xl md:text-6xl font-bold max-w-3xl leading-tight">
+            Everything you need to build trust networks
+          </h2>
         </div>
 
-        {/* Features grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Features list */}
+        <div className="space-y-20">
           {features.map((feature, index) => (
-            <Card 
-              key={index} 
-              className="bg-card/50 backdrop-blur border-border hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10 group animate-fade-in"
-              style={{ animationDelay: `${index * 0.1}s` }}
+            <div 
+              key={index}
+              className="grid md:grid-cols-12 gap-8 items-start group"
             >
-              <CardHeader>
-                <div className="w-12 h-12 rounded-lg bg-gradient-primary flex items-center justify-center mb-4 group-hover:shadow-glow-primary transition-all">
-                  <feature.icon className="w-6 h-6 text-primary" />
-                </div>
-                <CardTitle className="text-xl">{feature.title}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <CardDescription className="text-base leading-relaxed">
+              <div className="md:col-span-2">
+                <span className="font-serif text-6xl font-bold text-muted-foreground/20 group-hover:text-accent transition-colors">
+                  {feature.number}
+                </span>
+              </div>
+              
+              <div className="md:col-span-10 space-y-4">
+                <h3 className="font-serif text-3xl md:text-4xl font-bold">
+                  {feature.title}
+                </h3>
+                <p className="text-lg text-muted-foreground leading-relaxed max-w-3xl font-light">
                   {feature.description}
-                </CardDescription>
-              </CardContent>
-            </Card>
+                </p>
+              </div>
+            </div>
           ))}
         </div>
       </div>
