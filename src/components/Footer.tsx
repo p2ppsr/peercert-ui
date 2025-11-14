@@ -71,7 +71,7 @@ const Footer = () => {
         {/* Bottom bar */}
         <div className="pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-sm text-muted-foreground">
-            © 2025 Peer-to-peer Privacy Systems Research, LLC. MIT Licensed.
+            © 2025 Peer-to-peer Privacy Systems Research, LLC
           </p>
           <div className="flex items-center gap-4">
             <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
