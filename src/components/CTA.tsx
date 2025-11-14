@@ -1,16 +1,24 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
+import ctaBackground from "@/assets/cta-background.png";
 
 const CTA = () => {
   return (
-    <section className="py-32 px-6 bg-muted/30">
-      <div className="max-w-4xl mx-auto text-center space-y-12">
+    <section className="relative py-32 px-6 overflow-hidden">
+      <div className="absolute inset-0 z-0">
+        <img 
+          src={ctaBackground} 
+          alt="Background" 
+          className="w-full h-full object-cover"
+        />
+      </div>
+      <div className="relative z-10 max-w-4xl mx-auto text-center space-y-12">
         <div className="space-y-6">
-          <h2 className="font-serif text-5xl md:text-7xl font-bold leading-tight">
+          <h2 className="font-serif text-5xl md:text-7xl font-bold leading-tight text-white">
             Start building today
           </h2>
-          <p className="text-xl md:text-2xl text-muted-foreground font-light max-w-2xl mx-auto">
+          <p className="text-xl md:text-2xl font-light max-w-2xl mx-auto text-white/90">
             Install PeerCert and issue your first certificate in minutes.
           </p>
         </div>
@@ -41,7 +49,7 @@ const CTA = () => {
           </Button>
         </div>
 
-        <p className="text-sm text-muted-foreground font-light pt-8">
+        <p className="text-sm font-light pt-8 text-white/70">
           Built on BSV blockchain • Powered by @bsv/sdk
         </p>
       </div>
