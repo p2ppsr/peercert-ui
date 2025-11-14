@@ -33,11 +33,11 @@ const Hero = () => {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button size="lg" className="text-base group">
+              <Button size="lg" className="text-base group rounded-full">
                 Read Documentation
                 <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
               </Button>
-              <Button size="lg" variant="outline" className="text-base">
+              <Button size="lg" variant="outline" className="text-base rounded-full border-white/20 hover:bg-white/10 text-white">
                 <Github className="w-4 h-4 mr-2" />
                 GitHub
               </Button>
@@ -46,7 +46,7 @@ const Hero = () => {
 
           {/* Right column - Code */}
           <div className="lg:pl-8">
-            <div className="bg-foreground rounded-sm shadow-2xl border border-white/10 overflow-hidden">
+            <div className="bg-foreground rounded-lg shadow-2xl border border-white/10 overflow-hidden">
               {/* Terminal window controls */}
               <div className="bg-foreground/90 px-4 py-3 flex items-center gap-2 border-b border-white/10">
                 <div className="w-3 h-3 rounded-full bg-red-500" />
@@ -58,7 +58,16 @@ const Hero = () => {
               <div className="p-8">
                 <pre className="text-sm font-mono leading-relaxed overflow-x-auto">
                   <code className="text-white">
-{`npm install peercert`}
+{`await peercert.issue({
+  certificateType: Utils.toBase64(
+    Utils.toArray('employment', 'utf8')
+  ),
+  subjectIdentityKey: '03abc123...',
+  fields: {
+    role: 'Metanet Engineer',
+    company: 'Project Babbage'
+  }
+})`}
                   </code>
                 </pre>
               </div>
