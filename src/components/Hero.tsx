@@ -30,9 +30,10 @@ const Hero = () => {
               <div className="w-16 h-1 bg-accent drop-shadow-md" />
               
               <p className="text-xl md:text-2xl text-white/90 font-light leading-relaxed max-w-xl drop-shadow-md">
-Peer-to-peer certificate issuance and verification.
-
-Anyone can issue, verify, and revoke certificates. People keep their own, choose what to reveal, and your app integrates it with a few lines of code.</p>
+                Peer-to-peer certificate issuance and verification.
+                <br /><br />
+                Anyone can issue, verify, and revoke certificates. People keep their own, choose what to reveal, and your app integrates it with a few lines of code.
+              </p>
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4">
