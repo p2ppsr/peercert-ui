@@ -1,83 +1,62 @@
-import { Check } from "lucide-react";
-
-const benefits = [
-  {
-    title: "Zero Infrastructure",
-    description: "No servers to maintain, no databases to manage—just pure peer-to-peer certificate exchange."
-  },
-  {
-    title: "Instant Delivery",
-    description: "Certificates are delivered instantly via MessageBox or any channel you choose (QR, NFC, files)."
-  },
-  {
-    title: "Privacy First",
-    description: "Selective disclosure ensures only revealed fields are visible—everything else stays encrypted."
-  },
-  {
-    title: "Revocation Built-in",
-    description: "DID-based revocation on BSV blockchain provides reliable certificate invalidation when needed."
-  },
-  {
-    title: "TypeScript Native",
-    description: "Full TypeScript support with complete type safety and IntelliSense for better developer experience."
-  },
-  {
-    title: "Battle-Tested Security",
-    description: "Built on BSV SDK with proven cryptographic primitives and identity-based encryption."
-  }
-];
-
 const Benefits = () => {
   return (
-    <section className="py-24 px-6 relative">
-      <div className="max-w-6xl mx-auto">
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
-          {/* Left side - Content */}
-          <div>
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">
-              Why Choose PeerCert?
-            </h2>
-            <p className="text-xl text-muted-foreground mb-10 leading-relaxed">
-              Traditional certificate systems require servers, databases, and complex infrastructure. PeerCert eliminates all of that with a simple, secure, peer-to-peer approach.
-            </p>
-
+    <section className="py-32 px-6">
+      <div className="max-w-7xl mx-auto">
+        <div className="grid lg:grid-cols-2 gap-20 items-center">
+          {/* Left - Philosophy */}
+          <div className="space-y-12">
             <div className="space-y-6">
-              {benefits.map((benefit, index) => (
-                <div key={index} className="flex gap-4 group">
-                  <div className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center mt-1 group-hover:bg-primary/30 transition-colors">
-                    <Check className="w-4 h-4 text-primary" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold mb-1">{benefit.title}</h3>
-                    <p className="text-muted-foreground leading-relaxed">{benefit.description}</p>
-                  </div>
-                </div>
-              ))}
+              <p className="text-sm uppercase tracking-wider text-muted-foreground font-medium">
+                Philosophy
+              </p>
+              <h2 className="font-serif text-5xl md:text-6xl font-bold leading-tight">
+                No middleman. No gatekeepers.
+              </h2>
+            </div>
+
+            <div className="space-y-8">
+              <div className="space-y-3 border-l-2 border-accent pl-6">
+                <h3 className="text-2xl font-serif font-bold">Direct Exchange</h3>
+                <p className="text-lg text-muted-foreground font-light leading-relaxed">
+                  Traditional certificate systems require servers, databases, and administrators. PeerCert eliminates all of that. Certificates flow directly from issuer to recipient.
+                </p>
+              </div>
+
+              <div className="space-y-3 border-l-2 border-muted pl-6">
+                <h3 className="text-2xl font-serif font-bold">Your Data, Your Control</h3>
+                <p className="text-lg text-muted-foreground font-light leading-relaxed">
+                  No central database means no one else holds your credentials. Selective disclosure ensures you reveal only what's necessary, when it's necessary.
+                </p>
+              </div>
+
+              <div className="space-y-3 border-l-2 border-muted pl-6">
+                <h3 className="text-2xl font-serif font-bold">Built on Trust</h3>
+                <p className="text-lg text-muted-foreground font-light leading-relaxed">
+                  Cryptographic signatures on the BSV blockchain provide verifiable proof. No trust in servers, no reliance on uptime—just mathematics.
+                </p>
+              </div>
             </div>
           </div>
 
-          {/* Right side - Stats/Visual */}
-          <div className="relative">
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-accent/20 rounded-3xl blur-3xl" />
-            <div className="relative bg-card/80 backdrop-blur border border-border rounded-2xl p-8 shadow-2xl">
-              <div className="space-y-8">
-                <div className="space-y-2">
-                  <div className="text-5xl font-bold text-primary">100%</div>
-                  <div className="text-lg text-muted-foreground">Peer-to-Peer</div>
-                  <div className="text-sm text-muted-foreground">No central authority required</div>
-                </div>
-                
-                <div className="space-y-2">
-                  <div className="text-5xl font-bold text-accent">0</div>
-                  <div className="text-lg text-muted-foreground">Servers Needed</div>
-                  <div className="text-sm text-muted-foreground">Completely decentralized architecture</div>
-                </div>
-                
-                <div className="space-y-2">
-                  <div className="text-5xl font-bold text-primary">∞</div>
-                  <div className="text-lg text-muted-foreground">Verification Methods</div>
-                  <div className="text-sm text-muted-foreground">MessageBox, QR, NFC, files, and more</div>
-                </div>
+          {/* Right - Stats */}
+          <div className="lg:pl-12">
+            <div className="bg-foreground text-background p-12 rounded-sm space-y-16">
+              <div className="space-y-3 border-b border-background/20 pb-8">
+                <div className="font-serif text-7xl font-bold">100%</div>
+                <div className="text-lg font-light">Peer-to-Peer</div>
+                <div className="text-sm text-background/60 font-light">Zero central authority</div>
+              </div>
+
+              <div className="space-y-3 border-b border-background/20 pb-8">
+                <div className="font-serif text-7xl font-bold">0</div>
+                <div className="text-lg font-light">Servers Required</div>
+                <div className="text-sm text-background/60 font-light">Fully decentralized</div>
+              </div>
+
+              <div className="space-y-3">
+                <div className="font-serif text-7xl font-bold">∞</div>
+                <div className="text-lg font-light">Delivery Methods</div>
+                <div className="text-sm text-background/60 font-light">MessageBox, QR, NFC, files</div>
               </div>
             </div>
           </div>

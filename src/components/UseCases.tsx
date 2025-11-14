@@ -1,81 +1,57 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Users, BadgeCheck, Award, Building, GraduationCap, UserCheck } from "lucide-react";
-
 const useCases = [
   {
-    icon: Users,
-    title: "Trust Networks",
-    description: "Build decentralized reputation systems where peers vouch for each other's reliability, skills, and transaction history.",
-    example: "Peer-to-peer marketplaces, freelance platforms"
-  },
-  {
-    icon: UserCheck,
-    title: "Identity Verification",
-    description: "Enable peers to verify each other's identity attributes without centralized identity providers.",
-    example: "KYC verification, age verification, address confirmation"
-  },
-  {
-    icon: Award,
-    title: "Skill Endorsements",
-    description: "Create professional endorsements and skill validations without relying on centralized platforms.",
-    example: "Technical certifications, project collaborations"
-  },
-  {
-    icon: GraduationCap,
-    title: "Educational Credentials",
-    description: "Issue and verify educational achievements, course completions, and academic credentials peer-to-peer.",
-    example: "Bootcamp certificates, workshop attendance, mentorship programs"
-  },
-  {
-    icon: Building,
+    category: "Professional",
     title: "Employment History",
-    description: "Former colleagues and managers can issue employment certificates that are cryptographically verifiable.",
-    example: "Work history, role verification, project participation"
+    description: "Former colleagues issue verifiable employment certificates. No need to contact HR departments or wait for verification."
   },
   {
-    icon: BadgeCheck,
-    title: "Community Membership",
-    description: "Prove membership and participation in communities, organizations, or events without central databases.",
-    example: "Event attendance, community contributions, membership levels"
+    category: "Education",
+    title: "Credentials & Skills",
+    description: "Bootcamp instructors, course mentors, and workshop leaders can issue certificates directly to participants."
+  },
+  {
+    category: "Community",
+    title: "Reputation Systems",
+    description: "Build decentralized trust networks where peers vouch for reliability, skills, and transaction history."
+  },
+  {
+    category: "Identity",
+    title: "Peer Verification",
+    description: "Enable identity attribute verification between peers without centralized providers or databases."
   }
 ];
 
 const UseCases = () => {
   return (
-    <section className="py-24 px-6 relative bg-gradient-to-b from-background via-card/20 to-background">
+    <section className="py-32 px-6 bg-accent/5">
       <div className="max-w-7xl mx-auto">
-        {/* Section header */}
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            Built for Real-World Applications
-          </h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            From professional networks to educational systems—PeerCert enables trust at scale
+        <div className="mb-24">
+          <p className="text-sm uppercase tracking-wider text-muted-foreground mb-4 font-medium">
+            Applications
           </p>
+          <h2 className="font-serif text-5xl md:text-6xl font-bold max-w-3xl leading-tight">
+            Built for real-world trust scenarios
+          </h2>
         </div>
 
-        {/* Use cases grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-2 gap-x-16 gap-y-20">
           {useCases.map((useCase, index) => (
-            <Card 
-              key={index}
-              className="bg-card/80 backdrop-blur border-border hover:border-accent/50 transition-all duration-300 group"
-            >
-              <CardHeader>
-                <div className="w-14 h-14 rounded-xl bg-gradient-accent flex items-center justify-center mb-4 group-hover:shadow-glow-accent transition-all">
-                  <useCase.icon className="w-7 h-7 text-accent" />
-                </div>
-                <CardTitle className="text-2xl mb-2">{useCase.title}</CardTitle>
-                <CardDescription className="text-base leading-relaxed">
-                  {useCase.description}
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="inline-flex items-center text-sm text-muted-foreground bg-secondary/50 px-3 py-1.5 rounded-full">
-                  {useCase.example}
-                </div>
-              </CardContent>
-            </Card>
+            <div key={index} className="space-y-4 group">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-px bg-accent group-hover:w-16 transition-all" />
+                <span className="text-sm font-medium text-accent uppercase tracking-wider">
+                  {useCase.category}
+                </span>
+              </div>
+              
+              <h3 className="font-serif text-3xl font-bold">
+                {useCase.title}
+              </h3>
+              
+              <p className="text-lg text-muted-foreground font-light leading-relaxed">
+                {useCase.description}
+              </p>
+            </div>
           ))}
         </div>
       </div>
