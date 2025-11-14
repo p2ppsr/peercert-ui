@@ -11,7 +11,7 @@ const CTA = () => {
       </div>
       <div className="relative z-10 max-w-4xl mx-auto text-center space-y-12">
         <div className="space-y-6">
-          <h2 className="font-serif text-5xl md:text-7xl font-bold leading-tight text-white">
+          <h2 className="font-serif text-5xl md:text-7xl lg:text-8xl font-bold leading-[0.95] tracking-tight text-white drop-shadow-lg">
             Start building today
           </h2>
           <p className="text-xl md:text-2xl font-light max-w-2xl mx-auto text-white/90">
