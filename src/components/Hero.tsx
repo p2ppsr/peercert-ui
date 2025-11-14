@@ -20,13 +20,11 @@ const Hero = () => {
           <div className="space-y-8 pl-4 md:pl-6">
             <div className="space-y-6">
               <h1 className="font-serif text-6xl md:text-7xl lg:text-8xl font-bold leading-[0.95] tracking-tight text-white drop-shadow-lg">
-                Issue
-Verify
-Trust
+                Issue.
                 <br />
-                Verified.
+                Verify.
                 <br />
-                Trusted.
+                Trust.
               </h1>
               
               <div className="w-16 h-1 bg-accent drop-shadow-md" />
