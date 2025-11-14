@@ -53,7 +53,7 @@ const CTA = () => {
 
         {/* Additional info */}
         <p className="mt-12 text-sm text-muted-foreground">
-          MIT Licensed • Built on BSV blockchain • Powered by @bsv/sdk
+          Built on BSV blockchain • Powered by @bsv/sdk
         </p>
       </div>
     </section>
