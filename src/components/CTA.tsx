@@ -50,7 +50,7 @@ const CTA = () => {
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center pt-8">
           <Button size="lg" className="text-base group" asChild>
-            <Link to="/docs" onClick={() => window.scrollTo(0, 0)}>
+            <Link to="/docs" onClick={() => window.scrollTo({ top: 0, behavior: 'instant' })}>
               Read Documentation
               <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
             </Link>
