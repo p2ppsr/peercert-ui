@@ -9,8 +9,11 @@ const Hero = () => {
     <section className="relative min-h-screen flex items-center px-6 py-32 overflow-hidden">
       {/* Background Image */}
       <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: `url(${heroBackground})` }}
+        className="absolute inset-0 bg-cover bg-no-repeat"
+        style={{ 
+          backgroundImage: `url(${heroBackground})`,
+          backgroundPosition: 'center 40%'
+        }}
       />
       {/* Subtle gradient for text contrast */}
       <div className="absolute inset-0 bg-gradient-to-b from-foreground/20 via-transparent to-foreground/40" />
