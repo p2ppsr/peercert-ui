@@ -10,14 +10,14 @@ const Hero = () => {
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: `url(${heroBackground})` }}
       />
-      {/* Overlay for text readability */}
-      <div className="absolute inset-0 bg-background/60 backdrop-blur-sm" />
+      {/* Subtle gradient for text contrast */}
+      <div className="absolute inset-0 bg-gradient-to-b from-foreground/20 via-transparent to-foreground/40" />
       <div className="relative z-10 max-w-7xl mx-auto w-full">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Left column - Text */}
           <div className="space-y-8">
             <div className="space-y-6">
-              <h1 className="font-serif text-6xl md:text-7xl lg:text-8xl font-bold leading-[0.95] tracking-tight">
+              <h1 className="font-serif text-6xl md:text-7xl lg:text-8xl font-bold leading-[0.95] tracking-tight text-white drop-shadow-lg">
                 Direct.
                 <br />
                 Verified.
@@ -25,9 +25,9 @@ const Hero = () => {
                 Trusted.
               </h1>
               
-              <div className="w-16 h-1 bg-accent" />
+              <div className="w-16 h-1 bg-accent drop-shadow-md" />
               
-              <p className="text-xl md:text-2xl text-muted-foreground font-light leading-relaxed max-w-xl">
+              <p className="text-xl md:text-2xl text-white/90 font-light leading-relaxed max-w-xl drop-shadow-md">
                 Issue certificates directly between peers. No servers, no intermediaries—just pure cryptographic trust.
               </p>
             </div>
