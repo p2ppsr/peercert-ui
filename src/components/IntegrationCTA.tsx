@@ -1,9 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { MessageSquare, Zap, Shield, Headphones } from "lucide-react";
-
 const IntegrationCTA = () => {
-  return (
-    <section className="py-24 px-6 bg-gradient-to-br from-accent/20 via-background to-accent/10">
+  return <section className="py-24 px-6 bg-gradient-to-br from-accent/20 via-background to-accent/10">
       <div className="max-w-6xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left: Text Content */}
@@ -14,7 +12,7 @@ const IntegrationCTA = () => {
               </span>
             </div>
             <h2 className="font-serif text-4xl md:text-5xl font-bold leading-tight">
-              Need help integrating PeerCert?
+              Need help integrating certification workflows?
             </h2>
             <p className="text-lg text-muted-foreground font-light leading-relaxed">
               Our team of experts can help you seamlessly integrate PeerCert into your application. 
@@ -72,11 +70,7 @@ const IntegrationCTA = () => {
             </div>
 
             <div className="pt-6">
-              <Button 
-                size="lg" 
-                className="text-base group"
-                onClick={() => window.location.href = 'mailto:support@peercert.com?subject=Integration%20Help%20Request'}
-              >
+              <Button size="lg" className="text-base group" onClick={() => window.location.href = 'mailto:support@peercert.com?subject=Integration%20Help%20Request'}>
                 <MessageSquare className="w-5 h-5 mr-2" />
                 Contact Us for Integration Help
               </Button>
@@ -123,7 +117,7 @@ const IntegrationCTA = () => {
 
                 <div className="bg-accent/10 rounded-lg p-4">
                   <p className="text-sm font-light text-center">
-                    <span className="font-semibold">Trusted by leading organizations</span>
+                    
                     <br />
                     <span className="text-muted-foreground">
                       to securely manage their credentials
@@ -138,8 +132,6 @@ const IntegrationCTA = () => {
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default IntegrationCTA;
