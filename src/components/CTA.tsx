@@ -42,9 +42,7 @@ const CTA = () => {
                 fontFamily: 'monospace'
               }
             }}>
-                {`npm install peercert
-
-import { PeerCert } from 'peercert'`}
+                {`npm install peercert`}
               </SyntaxHighlighter>
             </div>
           </div>
