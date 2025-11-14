@@ -46,17 +46,22 @@ const Hero = () => {
 
           {/* Right column - Code */}
           <div className="lg:pl-8">
-            <div className="bg-foreground/10 backdrop-blur-md text-white p-8 rounded-sm shadow-2xl border border-white/20">
-              <div className="flex items-center gap-2 mb-6 pb-4 border-b border-white/20">
-                <div className="w-3 h-3 rounded-full bg-accent" />
-                <span className="text-sm font-mono text-white/60">Quick Start</span>
+            <div className="bg-foreground rounded-sm shadow-2xl border border-white/10 overflow-hidden">
+              {/* Terminal window controls */}
+              <div className="bg-foreground/90 px-4 py-3 flex items-center gap-2 border-b border-white/10">
+                <div className="w-3 h-3 rounded-full bg-red-500" />
+                <div className="w-3 h-3 rounded-full bg-yellow-500" />
+                <div className="w-3 h-3 rounded-full bg-green-500" />
               </div>
               
-              <pre className="text-sm font-mono leading-relaxed overflow-x-auto">
-                <code className="text-white/90">
+              {/* Terminal content */}
+              <div className="p-8">
+                <pre className="text-sm font-mono leading-relaxed overflow-x-auto">
+                  <code className="text-white">
 {`npm install peercert`}
-                </code>
-              </pre>
+                  </code>
+                </pre>
+              </div>
             </div>
           </div>
         </div>
