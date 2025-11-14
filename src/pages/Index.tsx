@@ -6,7 +6,6 @@ import UseCases from "@/components/UseCases";
 import Benefits from "@/components/Benefits";
 import IntegrationCTA from "@/components/IntegrationCTA";
 import CTA from "@/components/CTA";
-import Footer from "@/components/Footer";
 
 const Index = () => {
   return (
@@ -19,7 +18,6 @@ const Index = () => {
       <Benefits />
       <IntegrationCTA />
       <CTA />
-      <Footer />
     </div>
   );
 };
