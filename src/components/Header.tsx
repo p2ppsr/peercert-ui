@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
-import { Github, CheckCircle } from "lucide-react";
+import { CheckCircle } from "lucide-react";
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 const Header = () => {
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
@@ -33,7 +34,7 @@ const Header = () => {
             Features
           </a>
           <a href="#docs" className="text-sm font-medium text-white/80 hover:text-white transition-all duration-300 drop-shadow-md hover:scale-110">
-            Documentation
+            Getting Started
           </a>
           <a href="#use-cases" className="text-sm font-medium text-white/80 hover:text-white transition-all duration-300 drop-shadow-md hover:scale-110">
             Use Cases
@@ -42,11 +43,8 @@ const Header = () => {
 
         {/* Actions */}
         <div className="flex items-center gap-3">
-          <Button variant="ghost" size="icon" className="text-white hover:bg-white/10">
-            <Github className="w-5 h-5" />
-          </Button>
-          <Button size="sm" className="hidden sm:inline-flex">
-            Get Started
+          <Button size="sm" className="hidden sm:inline-flex" asChild>
+            <Link to="/docs">Docs</Link>
           </Button>
         </div>
       </nav>

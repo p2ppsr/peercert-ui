@@ -20,18 +20,13 @@ const Footer = () => {
               <h3 className="font-semibold text-sm uppercase tracking-wider">Product</h3>
               <ul className="space-y-3">
                 <li>
-                  <a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors font-light">
+                  <a href="#features" className="text-sm text-muted-foreground hover:text-foreground transition-colors font-light">
                     Features
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors font-light">
+                  <a href="#use-cases" className="text-sm text-muted-foreground hover:text-foreground transition-colors font-light">
                     Use Cases
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors font-light">
-                    Pricing
                   </a>
                 </li>
               </ul>
@@ -41,34 +36,24 @@ const Footer = () => {
               <h3 className="font-semibold text-sm uppercase tracking-wider">Resources</h3>
               <ul className="space-y-3">
                 <li>
-                  <a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors font-light">
+                  <a href="/docs" className="text-sm text-muted-foreground hover:text-foreground transition-colors font-light">
                     Documentation
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors font-light">
-                    API Reference
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors font-light">
-                    GitHub
                   </a>
                 </li>
               </ul>
             </div>
 
             <div className="space-y-4">
-              <h3 className="font-semibold text-sm uppercase tracking-wider">Company</h3>
+              <h3 className="font-semibold text-sm uppercase tracking-wider">Community</h3>
               <ul className="space-y-3">
                 <li>
-                  <a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors font-light">
-                    About
+                  <a href="https://join.bsv.chat" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-foreground transition-colors font-light">
+                    BSV Chat
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors font-light">
-                    Contact
+                  <a href="https://metanetacademy.com" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-foreground transition-colors font-light">
+                    Metanet Academy
                   </a>
                 </li>
               </ul>
