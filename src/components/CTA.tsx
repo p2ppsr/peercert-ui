@@ -2,6 +2,8 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import ctaBackground from "@/assets/cta-background.png";
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 const CTA = () => {
   return <section className="relative py-32 px-6 overflow-hidden">
       <div className="absolute inset-0 z-0">
@@ -18,13 +20,36 @@ const CTA = () => {
         </div>
 
         <div className="max-w-2xl mx-auto">
-          <div className="bg-foreground text-background p-8 rounded-sm">
-            <div className="text-left space-y-4">
-              <div className="text-sm text-background/60 font-mono">Terminal</div>
-              <div className="font-mono text-lg">npm install peercert</div>
-              <div className="pt-4 border-t border-background/20 text-sm text-background/60 font-mono">
-                import {'{'} PeerCert {'}'} from 'peercert'
-              </div>
+          <div className="bg-foreground rounded-2xl shadow-2xl border border-white/10 overflow-hidden">
+            {/* Terminal window controls */}
+            <div className="bg-foreground/90 px-4 py-3 flex items-center gap-2 border-b border-white/10">
+              <div className="w-3 h-3 rounded-full bg-red-500" />
+              <div className="w-3 h-3 rounded-full bg-yellow-500" />
+              <div className="w-3 h-3 rounded-full bg-green-500" />
+              <span className="ml-3 text-sm text-background/60 font-mono">Terminal</span>
+            </div>
+            
+            {/* Code content */}
+            <div className="p-6">
+              <SyntaxHighlighter 
+                language="bash" 
+                style={vscDarkPlus}
+                customStyle={{
+                  background: 'transparent',
+                  padding: 0,
+                  margin: 0,
+                  fontSize: '0.875rem'
+                }}
+                codeTagProps={{
+                  style: {
+                    fontFamily: 'monospace'
+                  }
+                }}
+              >
+                {`npm install peercert
+
+import { PeerCert } from 'peercert'`}
+              </SyntaxHighlighter>
             </div>
           </div>
         </div>

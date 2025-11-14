@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import IntegrationCTA from "@/components/IntegrationCTA";
 import Footer from "@/components/Footer";
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 const docSections = [
   {
@@ -172,8 +174,34 @@ const Docs = () => {
                   <div key={index} className="space-y-3">
                     <h2 className="text-2xl font-semibold">{subsection.title}</h2>
                     {subsection.code ? (
-                      <div className="bg-muted rounded-lg p-4 font-mono text-sm overflow-x-auto">
-                        <pre className="text-foreground">{subsection.content}</pre>
+                      <div className="bg-foreground rounded-2xl shadow-2xl border border-white/10 overflow-hidden">
+                        {/* Terminal window controls */}
+                        <div className="bg-foreground/90 px-4 py-3 flex items-center gap-2 border-b border-white/10">
+                          <div className="w-3 h-3 rounded-full bg-red-500" />
+                          <div className="w-3 h-3 rounded-full bg-yellow-500" />
+                          <div className="w-3 h-3 rounded-full bg-green-500" />
+                        </div>
+                        
+                        {/* Code content */}
+                        <div className="p-6">
+                          <SyntaxHighlighter 
+                            language="typescript" 
+                            style={vscDarkPlus}
+                            customStyle={{
+                              background: 'transparent',
+                              padding: 0,
+                              margin: 0,
+                              fontSize: '0.875rem'
+                            }}
+                            codeTagProps={{
+                              style: {
+                                fontFamily: 'monospace'
+                              }
+                            }}
+                          >
+                            {subsection.content}
+                          </SyntaxHighlighter>
+                        </div>
                       </div>
                     ) : (
                       <p className="text-muted-foreground leading-relaxed">
