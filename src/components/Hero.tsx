@@ -1,10 +1,18 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Github } from "lucide-react";
+import heroBackground from "@/assets/hero-background.png";
 
 const Hero = () => {
   return (
-    <section className="min-h-[90vh] flex items-center px-6 py-32">
-      <div className="max-w-7xl mx-auto w-full">
+    <section className="relative min-h-[90vh] flex items-center px-6 py-32 overflow-hidden">
+      {/* Background Image */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: `url(${heroBackground})` }}
+      />
+      {/* Overlay for text readability */}
+      <div className="absolute inset-0 bg-background/60 backdrop-blur-sm" />
+      <div className="relative z-10 max-w-7xl mx-auto w-full">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Left column - Text */}
           <div className="space-y-8">
