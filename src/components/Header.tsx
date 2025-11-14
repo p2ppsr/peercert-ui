@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { CheckCircle, BookOpen } from "lucide-react";
+import { CheckCircle } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 const Header = () => {
@@ -41,15 +41,6 @@ const Header = () => {
           </a>
         </div>
 
-        {/* Actions */}
-        <div className="flex items-center gap-3">
-          <Button size="sm" className="hidden sm:inline-flex rounded-md" asChild>
-            <Link to="/docs">
-              <BookOpen className="w-4 h-4" />
-              Docs
-            </Link>
-          </Button>
-        </div>
       </nav>
     </header>;
 };
