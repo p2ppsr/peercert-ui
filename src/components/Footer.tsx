@@ -1,8 +1,6 @@
 import { Github, Twitter, Mail } from "lucide-react";
-
 const Footer = () => {
-  return (
-    <footer className="border-t border-border">
+  return <footer className="border-t border-border">
       <div className="max-w-7xl mx-auto px-6 py-20">
         <div className="grid md:grid-cols-12 gap-12 mb-16">
           {/* Brand */}
@@ -12,7 +10,7 @@ const Footer = () => {
               <span className="font-serif text-2xl font-bold">PeerCert</span>
             </div>
             <p className="text-muted-foreground font-light leading-relaxed max-w-md">
-              Peer-to-peer certificate issuance and management. Direct, verified, trusted—built on the BSV blockchain.
+              Peer-to-peer certificate issuance and management.   
             </p>
           </div>
 
@@ -96,8 +94,6 @@ const Footer = () => {
           </div>
         </div>
       </div>
-    </footer>
-  );
+    </footer>;
 };
-
 export default Footer;
