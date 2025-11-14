@@ -1,9 +1,30 @@
 import { Button } from "@/components/ui/button";
 import { Github, CheckCircle } from "lucide-react";
+import { useState, useEffect } from "react";
 
 const Header = () => {
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      
+      if (currentScrollY < lastScrollY || currentScrollY < 50) {
+        setIsVisible(true);
+      } else if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        setIsVisible(false);
+      }
+      
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [lastScrollY]);
+
   return (
-    <header className="fixed top-0 w-full z-50">
+    <header className={`fixed top-0 w-full z-50 transition-transform duration-300 ${isVisible ? 'translate-y-0' : '-translate-y-full'}`}>
       <nav className="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
         {/* Logo */}
         <div className="flex items-center gap-3">
