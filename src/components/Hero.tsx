@@ -3,18 +3,13 @@ import { ArrowRight, Github, ChevronDown } from "lucide-react";
 import heroBackground from "@/assets/hero-background.png";
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
-
 const Hero = () => {
-  return (
-    <section className="relative min-h-screen flex items-center px-6 py-32 overflow-hidden">
+  return <section className="relative min-h-screen flex items-center px-6 py-32 overflow-hidden">
       {/* Background Image */}
-      <div 
-        className="absolute inset-0 bg-cover bg-no-repeat"
-        style={{ 
-          backgroundImage: `url(${heroBackground})`,
-          backgroundPosition: 'center 40%'
-        }}
-      />
+      <div className="absolute inset-0 bg-cover bg-no-repeat" style={{
+      backgroundImage: `url(${heroBackground})`,
+      backgroundPosition: 'center 40%'
+    }} />
       {/* Subtle gradient for text contrast */}
       <div className="absolute inset-0 bg-gradient-to-b from-foreground/20 via-transparent to-foreground/40" />
       <div className="relative z-10 max-w-7xl mx-auto w-full">
@@ -32,9 +27,29 @@ const Hero = () => {
               
               <div className="w-16 h-1 bg-accent drop-shadow-md" />
               
-              <p className="text-xl md:text-2xl text-white/90 font-light leading-relaxed max-w-xl drop-shadow-md">
-                Issue certificates directly between peers. No servers, no intermediaries—just pure cryptographic trust.
-              </p>
+              <p className="text-xl md:text-2xl text-white/90 font-light leading-relaxed max-w-xl drop-shadow-md">Peer-to-peer certificate issuance and verification.
+
+Anybody can issue and revoke certificates. People keep their own credentials, decide what to reveal, and your app integrates it with a few lines of code.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </p>
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4">
@@ -61,22 +76,17 @@ const Hero = () => {
               
               {/* Terminal content */}
               <div className="p-6">
-                <SyntaxHighlighter
-                  language="typescript"
-                  style={vscDarkPlus}
-                  customStyle={{
-                    background: 'transparent',
-                    padding: 0,
-                    margin: 0,
-                    fontSize: '0.875rem',
-                  }}
-                  codeTagProps={{
-                    style: {
-                      fontFamily: 'monospace',
-                    }
-                  }}
-                >
-{`await peercert.issue({
+                <SyntaxHighlighter language="typescript" style={vscDarkPlus} customStyle={{
+                background: 'transparent',
+                padding: 0,
+                margin: 0,
+                fontSize: '0.875rem'
+              }} codeTagProps={{
+                style: {
+                  fontFamily: 'monospace'
+                }
+              }}>
+                {`await peercert.issue({
   certificateType: Utils.toBase64(
     Utils.toArray('employment', 'utf8')
   ),
@@ -97,8 +107,6 @@ const Hero = () => {
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 animate-bounce">
         <ChevronDown className="w-8 h-8 text-white/60 drop-shadow-lg" />
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default Hero;
