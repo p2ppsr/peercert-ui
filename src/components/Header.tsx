@@ -34,13 +34,13 @@ const Header = () => {
 
         {/* Navigation */}
         <div className="hidden md:flex items-center gap-10">
-          <a href="#features" className="text-sm font-medium text-white/80 hover:text-white transition-colors drop-shadow-md">
+          <a href="#features" className="text-sm font-medium text-white/80 hover:text-white transition-all duration-300 drop-shadow-md hover:scale-110">
             Features
           </a>
-          <a href="#use-cases" className="text-sm font-medium text-white/80 hover:text-white transition-colors drop-shadow-md">
+          <a href="#use-cases" className="text-sm font-medium text-white/80 hover:text-white transition-all duration-300 drop-shadow-md hover:scale-110">
             Use Cases
           </a>
-          <a href="#docs" className="text-sm font-medium text-white/80 hover:text-white transition-colors drop-shadow-md">
+          <a href="#docs" className="text-sm font-medium text-white/80 hover:text-white transition-all duration-300 drop-shadow-md hover:scale-110">
             Documentation
           </a>
         </div>
