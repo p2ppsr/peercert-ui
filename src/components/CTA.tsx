@@ -52,6 +52,10 @@ const CTA = () => {
         <p className="text-sm font-light pt-8 text-white/70">
           Built on BSV blockchain • Powered by @bsv/sdk
         </p>
+        
+        <p className="text-sm font-light pt-16 text-white/60">
+          © 2025 Peer-to-peer Privacy Systems Research, LLC
+        </p>
       </div>
     </section>
   );
