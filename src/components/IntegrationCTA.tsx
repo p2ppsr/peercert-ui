@@ -70,7 +70,7 @@ const IntegrationCTA = () => {
             </div>
 
             <div className="pt-6">
-              <Button size="lg" className="text-base group" onClick={() => window.location.href = 'mailto:support@peercert.com?subject=Integration%20Help%20Request'}>
+              <Button size="lg" className="text-base group" onClick={() => window.location.href = 'mailto:support@projectbabbage.com?subject=Integration%20Help%20Request'}>
                 <MessageSquare className="w-5 h-5 mr-2" />
                 Contact Us for Integration Help
               </Button>
