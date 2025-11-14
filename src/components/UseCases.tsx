@@ -23,7 +23,7 @@ const useCases = [
 
 const UseCases = () => {
   return (
-    <section className="py-32 px-6 bg-accent/5">
+    <section id="use-cases" className="py-32 px-6 bg-accent/5">
       <div className="max-w-7xl mx-auto">
         <div className="mb-24">
           <p className="text-sm uppercase tracking-wider text-muted-foreground mb-4 font-medium">

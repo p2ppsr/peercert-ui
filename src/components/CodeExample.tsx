@@ -53,7 +53,7 @@ const result =
 
 const CodeExample = () => {
   return (
-    <section className="py-32 px-6">
+    <section id="docs" className="py-32 px-6">
       <div className="max-w-7xl mx-auto">
         <div className="mb-24">
           <p className="text-sm uppercase tracking-wider text-muted-foreground mb-4 font-medium">
