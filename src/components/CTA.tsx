@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Github } from "lucide-react";
+import { ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const CTA = () => {
   return (
@@ -27,13 +28,16 @@ const CTA = () => {
         </div>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center pt-8">
-          <Button size="lg" className="text-base group">
-            Read Documentation
-            <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+          <Button size="lg" className="text-base group" asChild>
+            <Link to="/docs">
+              Read Documentation
+              <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+            </Link>
           </Button>
-          <Button size="lg" variant="outline" className="text-base">
-            <Github className="w-4 h-4 mr-2" />
-            View on GitHub
+          <Button size="lg" variant="outline" className="text-base" asChild>
+            <a href="#docs">
+              Get Started
+            </a>
           </Button>
         </div>
 

@@ -3,6 +3,7 @@ import { CheckCircle, ChevronRight, Book, Code, Rocket, Shield } from "lucide-re
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import IntegrationCTA from "@/components/IntegrationCTA";
 import Footer from "@/components/Footer";
 
 const docSections = [
@@ -215,6 +216,7 @@ const Docs = () => {
         </div>
       </div>
 
+      <IntegrationCTA />
       <Footer />
     </div>
   );
