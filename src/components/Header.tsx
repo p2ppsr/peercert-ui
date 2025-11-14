@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Github } from "lucide-react";
+import { Github, CheckCircle } from "lucide-react";
 
 const Header = () => {
   return (
@@ -7,7 +7,7 @@ const Header = () => {
       <nav className="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
         {/* Logo */}
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-accent rounded-sm drop-shadow-md" />
+          <CheckCircle className="w-8 h-8 text-accent drop-shadow-md" />
           <span className="font-serif text-2xl font-bold text-white drop-shadow-lg">PeerCert</span>
         </div>
 
