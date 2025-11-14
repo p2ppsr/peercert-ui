@@ -17,7 +17,7 @@ const Hero = () => {
       <div className="relative z-10 max-w-7xl mx-auto w-full">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Left column - Text */}
-          <div className="space-y-8">
+          <div className="space-y-8 pl-4 md:pl-6">
             <div className="space-y-6">
               <h1 className="font-serif text-6xl md:text-7xl lg:text-8xl font-bold leading-[0.95] tracking-tight text-white drop-shadow-lg">
                 Direct.
@@ -47,7 +47,7 @@ const Hero = () => {
           </div>
 
           {/* Right column - Code */}
-          <div className="lg:pl-8">
+          <div className="lg:pl-8 pt-8 md:pt-12">
             <div className="bg-foreground rounded-2xl shadow-2xl border border-white/10 overflow-hidden">
               {/* Terminal window controls */}
               <div className="bg-foreground/90 px-4 py-3 flex items-center gap-2 border-b border-white/10">
