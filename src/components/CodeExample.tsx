@@ -51,6 +51,9 @@ const result =
   }
 ];
 
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
+
 const CodeExample = () => {
   return (
     <section id="docs" className="py-32 px-6">
@@ -83,12 +86,34 @@ const CodeExample = () => {
               </div>
               
               <div className="lg:col-span-8">
-                <div className="bg-foreground text-background p-6 rounded-sm shadow-xl">
-                  <pre className="text-sm font-mono overflow-x-auto">
-                    <code className="text-background/90 leading-relaxed">
+                <div className="bg-foreground rounded-2xl shadow-2xl border border-white/10 overflow-hidden">
+                  {/* Terminal window controls */}
+                  <div className="bg-foreground/90 px-4 py-3 flex items-center gap-2 border-b border-white/10">
+                    <div className="w-3 h-3 rounded-full bg-red-500" />
+                    <div className="w-3 h-3 rounded-full bg-yellow-500" />
+                    <div className="w-3 h-3 rounded-full bg-green-500" />
+                  </div>
+                  
+                  {/* Code content */}
+                  <div className="p-6">
+                    <SyntaxHighlighter 
+                      language="typescript" 
+                      style={vscDarkPlus}
+                      customStyle={{
+                        background: 'transparent',
+                        padding: 0,
+                        margin: 0,
+                        fontSize: '0.875rem'
+                      }}
+                      codeTagProps={{
+                        style: {
+                          fontFamily: 'monospace'
+                        }
+                      }}
+                    >
                       {example.code}
-                    </code>
-                  </pre>
+                    </SyntaxHighlighter>
+                  </div>
                 </div>
               </div>
             </div>
