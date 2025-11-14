@@ -1,10 +1,10 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Github } from "lucide-react";
+import { ArrowRight, Github, ChevronDown } from "lucide-react";
 import heroBackground from "@/assets/hero-background.png";
 
 const Hero = () => {
   return (
-    <section className="relative min-h-[90vh] flex items-center px-6 py-32 overflow-hidden">
+    <section className="relative min-h-screen flex items-center px-6 py-32 overflow-hidden">
       {/* Background Image */}
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
@@ -74,6 +74,11 @@ await peercert.issue({
             </div>
           </div>
         </div>
+      </div>
+      
+      {/* Scroll indicator */}
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 animate-bounce">
+        <ChevronDown className="w-8 h-8 text-white/60 drop-shadow-lg" />
       </div>
     </section>
   );
