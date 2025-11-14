@@ -7,7 +7,7 @@ const features = [
   {
     number: "02",
     title: "Cryptographic Verification",
-    description: "Every certificate is cryptographically signed using BSV identity keys. Tamper-proof, verifiable, and built on proven cryptographic primitives."
+    description: "Every certificate is cryptographically signed using Metanet identity keys. Tamper-proof, verifiable, and built on proven cryptographic primitives."
   },
   {
     number: "03",
