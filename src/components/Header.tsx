@@ -29,7 +29,7 @@ const Header = () => {
         {/* Logo */}
         <div className="flex items-center gap-3">
           <CheckCircle className="w-8 h-8 text-accent drop-shadow-md" />
-          <span className="font-serif text-2xl font-bold text-white drop-shadow-lg">PeerCert</span>
+          <span className="font-serif text-2xl font-bold text-white drop-shadow-lg">Issue Verify Trust</span>
         </div>
 
         {/* Navigation */}
