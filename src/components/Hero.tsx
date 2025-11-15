@@ -38,7 +38,18 @@ const Hero = () => {
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4">
-            <Button size="lg" className="text-base group rounded-full" asChild>
+            <Button
+              size="lg"
+              className="text-base group rounded-full bg-blue-600 text-white hover:bg-blue-700 shadow-lg hover:shadow-xl transition-all"
+              asChild
+            >
+              <Link to="/demo" onClick={() => window.scrollTo({ top: 0, behavior: 'instant' })}>
+                Try Demo
+                <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+              </Link>
+            </Button>
+
+            <Button size="lg" variant="outline" className="text-base group rounded-full" asChild>
               <Link to="/docs" onClick={() => window.scrollTo({ top: 0, behavior: 'instant' })}>
                 Read Documentation
                 <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
