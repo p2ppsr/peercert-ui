@@ -28,7 +28,7 @@ const Hero = () => {
               Trust.
             </h1>
 
-            <div className="w-16 h-1 bg-accent drop-shadow-md" />
+            <div className="w-16 h-1 bg-blue-500 drop-shadow-md" />
 
             <p className="text-xl md:text-2xl text-white/90 font-light leading-relaxed max-w-xl drop-shadow-md">
               <span className="font-semibold">Peer-to-peer certificate issuance and verification.</span>
@@ -49,7 +49,11 @@ const Hero = () => {
               </Link>
             </Button>
 
-            <Button size="lg" variant="outline" className="text-base group rounded-full" asChild>
+            <Button
+              size="lg"
+              className="text-base group rounded-full bg-black text-white hover:bg-black/90 border border-white/10 transition-colors"
+              asChild
+            >
               <Link to="/docs" onClick={() => window.scrollTo({ top: 0, behavior: 'instant' })}>
                 Read Documentation
                 <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
@@ -65,7 +69,7 @@ const Hero = () => {
             <div className="bg-foreground/90 px-4 py-3 flex items-center gap-2 border-b border-white/10">
               <div className="w-3 h-3 rounded-full bg-red-500" />
               <div className="w-3 h-3 rounded-full bg-yellow-500" />
-              <div className="w-3 h-3 rounded-full bg-green-500" />
+              <div className="w-3 h-3 rounded-full bg-blue-500" />
             </div>
 
             {/* Terminal content */}

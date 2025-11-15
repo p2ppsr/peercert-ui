@@ -72,7 +72,7 @@ const CodeExample = () => {
 
         <div className="space-y-16">
           {examples.map((example, index) => (
-            <div 
+            <div
               key={index}
               className="grid lg:grid-cols-12 gap-12 items-start"
             >
@@ -84,20 +84,20 @@ const CodeExample = () => {
                   {example.description}
                 </p>
               </div>
-              
+
               <div className="lg:col-span-8">
                 <div className="bg-foreground rounded-2xl shadow-2xl border border-white/10 overflow-hidden">
                   {/* Terminal window controls */}
                   <div className="bg-foreground/90 px-4 py-3 flex items-center gap-2 border-b border-white/10">
                     <div className="w-3 h-3 rounded-full bg-red-500" />
                     <div className="w-3 h-3 rounded-full bg-yellow-500" />
-                    <div className="w-3 h-3 rounded-full bg-green-500" />
+                    <div className="w-3 h-3 rounded-full bg-blue-500" />
                   </div>
-                  
+
                   {/* Code content */}
                   <div className="p-6">
-                    <SyntaxHighlighter 
-                      language="typescript" 
+                    <SyntaxHighlighter
+                      language="typescript"
                       style={vscDarkPlus}
                       customStyle={{
                         background: 'transparent',

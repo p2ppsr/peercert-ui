@@ -38,16 +38,16 @@ const UseCases = () => {
           {useCases.map((useCase, index) => (
             <div key={index} className="space-y-4 group">
               <div className="flex items-center gap-4">
-                <div className="w-12 h-px bg-accent group-hover:w-16 transition-all" />
-                <span className="text-sm font-medium text-accent uppercase tracking-wider">
+                <div className="w-12 h-px bg-blue-500 group-hover:w-16 transition-all" />
+                <span className="text-sm font-medium text-blue-500 uppercase tracking-wider">
                   {useCase.category}
                 </span>
               </div>
-              
+
               <h3 className="font-serif text-3xl font-bold">
                 {useCase.title}
               </h3>
-              
+
               <p className="text-lg text-muted-foreground font-light leading-relaxed">
                 {useCase.description}
               </p>

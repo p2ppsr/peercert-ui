@@ -1,0 +1,47 @@
+import { Button } from "@/components/ui/button";
+import { CheckCircle } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+const Header = () => {
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      if (currentScrollY < lastScrollY || currentScrollY < 50) {
+        setIsVisible(true);
+      } else if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        setIsVisible(false);
+      }
+      setLastScrollY(currentScrollY);
+    };
+    window.addEventListener("scroll", handleScroll, {
+      passive: true
+    });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [lastScrollY]);
+  return <header className={`fixed top-0 w-full z-50 transition-transform duration-300 ${isVisible ? 'translate-y-0' : '-translate-y-full'}`}>
+    <nav className="max-w-7xl mx-auto px-6 py-5 flex items-center justify-center relative">
+      {/* Logo */}
+      <div className="flex items-center gap-3 absolute left-6">
+        <CheckCircle className="w-8 h-8 text-blue-500 drop-shadow-md" />
+        <span className="font-serif text-2xl font-bold text-white drop-shadow-lg">PeerCert</span>
+      </div>
+
+      {/* Navigation */}
+      <div className="hidden md:flex items-center gap-10">
+        <a href="#features" className="text-sm font-medium text-white/80 hover:text-white transition-all duration-300 drop-shadow-md hover:scale-110">
+          Features
+        </a>
+        <a href="#docs" className="text-sm font-medium text-white/80 hover:text-white transition-all duration-300 drop-shadow-md hover:scale-110">
+          Getting Started
+        </a>
+        <a href="#use-cases" className="text-sm font-medium text-white/80 hover:text-white transition-all duration-300 drop-shadow-md hover:scale-110">
+          Use Cases
+        </a>
+      </div>
+
+    </nav>
+  </header>;
+};
+export default Header;

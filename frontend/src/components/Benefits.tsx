@@ -15,7 +15,7 @@ const Benefits = () => {
             </div>
 
             <div className="space-y-8">
-              <div className="space-y-3 border-l-2 border-accent pl-6">
+              <div className="space-y-3 border-l-2 border-blue-500 pl-6">
                 <h3 className="text-2xl font-serif font-bold">Direct Exchange</h3>
                 <p className="text-lg text-muted-foreground font-light leading-relaxed">
                   Traditional certificate systems require servers, databases, and administrators. PeerCert eliminates all of that. Certificates flow directly from issuer to recipient.

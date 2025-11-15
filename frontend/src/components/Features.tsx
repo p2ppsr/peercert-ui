@@ -38,16 +38,16 @@ const Features = () => {
         {/* Features list */}
         <div className="space-y-20">
           {features.map((feature, index) => (
-            <div 
+            <div
               key={index}
               className="grid md:grid-cols-12 gap-8 items-start group"
             >
               <div className="md:col-span-2">
-                <span className="font-serif text-6xl font-bold text-muted-foreground/20 group-hover:text-accent transition-colors">
+                <span className="font-serif text-6xl font-bold text-muted-foreground/20 group-hover:text-blue-500 transition-colors">
                   {feature.number}
                 </span>
               </div>
-              
+
               <div className="md:col-span-10 space-y-4">
                 <h3 className="font-serif text-3xl md:text-4xl font-bold">
                   {feature.title}
