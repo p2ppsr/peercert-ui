@@ -44,10 +44,10 @@ function DemoContent() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto py-8">
+    <div className="max-w-7xl mx-auto py-4 sm:py-8">
       {/* Tab Navigation */}
-      <div className="bg-white rounded-lg shadow-lg mb-6 overflow-x-auto">
-        <div className="flex border-b border-gray-200">
+      <div className="bg-white rounded-lg shadow-lg mb-4 sm:mb-6 overflow-x-auto">
+        <div className="flex border-b border-gray-200 min-w-max sm:min-w-0">
           {tabs.map((tab) => {
             const Icon = tab.icon
             return (
@@ -55,13 +55,13 @@ function DemoContent() {
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={cn(
-                  "flex-1 flex items-center justify-center gap-2 px-6 py-4 text-sm font-medium transition-colors whitespace-nowrap",
+                  "flex-1 flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm font-medium transition-colors whitespace-nowrap min-w-[60px] sm:min-w-0",
                   activeTab === tab.id
                     ? "text-blue-600 border-b-2 border-blue-600 bg-blue-50"
                     : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
                 )}
               >
-                <Icon className="w-5 h-5" />
+                <Icon className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
                 <span className="hidden sm:inline">{tab.label}</span>
               </button>
             )

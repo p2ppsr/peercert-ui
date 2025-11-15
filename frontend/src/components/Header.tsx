@@ -21,15 +21,15 @@ const Header = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [lastScrollY]);
   return <header className={`fixed top-0 w-full z-50 transition-transform duration-300 ${isVisible ? 'translate-y-0' : '-translate-y-full'}`}>
-    <nav className="max-w-7xl mx-auto px-6 py-5 flex items-center justify-center relative">
+    <nav className="max-w-7xl mx-auto px-4 sm:px-6 py-5 flex items-center justify-between">
       {/* Logo */}
-      <div className="flex items-center gap-3 absolute left-6">
-        <CheckCircle className="w-8 h-8 text-blue-500 drop-shadow-md" />
-        <span className="font-serif text-2xl font-bold text-white drop-shadow-lg">PeerCert</span>
+      <div className="flex items-center gap-2 sm:gap-3">
+        <CheckCircle className="w-6 h-6 sm:w-8 sm:h-8 text-blue-500 drop-shadow-md" />
+        <span className="font-serif text-lg sm:text-2xl font-bold text-white drop-shadow-lg">PeerCert</span>
       </div>
 
       {/* Navigation */}
-      <div className="hidden md:flex items-center gap-10">
+      <div className="hidden md:flex items-center gap-6 lg:gap-10">
         <a href="#features" className="text-sm font-medium text-white/80 hover:text-white transition-all duration-300 drop-shadow-md hover:scale-110">
           Features
         </a>
