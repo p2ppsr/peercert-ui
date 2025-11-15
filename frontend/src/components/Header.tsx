@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { CheckCircle } from "lucide-react";
+import peercertLogo from "@/assets/peercertLogo.png";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 const Header = () => {
@@ -23,9 +23,12 @@ const Header = () => {
   return <header className={`fixed top-0 w-full z-50 transition-transform duration-300 ${isVisible ? 'translate-y-0' : '-translate-y-full'}`}>
     <nav className="max-w-7xl mx-auto px-4 sm:px-6 py-5 flex items-center justify-between">
       {/* Logo */}
-      <div className="flex items-center gap-2 sm:gap-3">
-        <CheckCircle className="w-6 h-6 sm:w-8 sm:h-8 text-blue-500 drop-shadow-md" />
-        <span className="font-serif text-lg sm:text-2xl font-bold text-white drop-shadow-lg">PeerCert</span>
+      <div className="flex items-center">
+        <img
+          src={peercertLogo}
+          alt="PeerCert logo"
+          className="h-9 sm:h-10 w-auto drop-shadow-lg"
+        />
       </div>
 
       {/* Navigation */}

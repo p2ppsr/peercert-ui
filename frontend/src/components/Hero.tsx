@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Github, ChevronDown } from "lucide-react";
-import heroBackground from "@/assets/hero-background.png";
+import { ArrowRight, ChevronDown } from "lucide-react";
+import heroBackground from "@/assets/hero-background.webp";
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { Link } from "react-router-dom";

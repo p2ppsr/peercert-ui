@@ -1,4 +1,5 @@
 import { Github, Twitter, Mail } from "lucide-react";
+import peercertLogo from "@/assets/peercertLogo.png";
 const Footer = () => {
   return <footer className="border-t border-border">
     <div className="max-w-7xl mx-auto px-6 py-20">
@@ -6,8 +7,11 @@ const Footer = () => {
         {/* Brand */}
         <div className="md:col-span-5 space-y-6">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-blue-500 rounded-sm" />
-            <span className="font-serif text-2xl font-bold">PeerCert</span>
+            <img
+              src={peercertLogo}
+              alt="PeerCert logo"
+              className="h-9 w-auto"
+            />
           </div>
           <p className="text-muted-foreground font-light leading-relaxed max-w-md">
             Peer-to-peer certificate issuance and management.

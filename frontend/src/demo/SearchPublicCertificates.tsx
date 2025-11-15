@@ -425,14 +425,21 @@ export default function SearchPublicCertificates({ wallet: providedWallet }: Sea
 
                       <div className="flex-1">
                         <div className="flex items-start justify-between mb-2">
-                          <h4 className="font-semibold text-gray-900">{cert.certifierInfo.name}</h4>
+                          {/* Subject as the primary identity */}
+                          <h4 className="font-semibold text-gray-900 break-all">
+                            Subject: {cert.subject}
+                          </h4>
                           <div className="flex items-center gap-1">
                             <Award className="w-4 h-4 text-yellow-500" />
                             <span className="text-sm text-gray-600">Trust: {cert.certifierInfo.trust}</span>
                           </div>
                         </div>
 
-                        <p className="text-gray-600 text-sm mb-3">{cert.certifierInfo.description}</p>
+                        {/* Certifier as secondary context */}
+                        <p className="text-gray-600 text-sm mb-1">
+                          Issued by <span className="font-medium">{cert.certifierInfo.name}</span>
+                        </p>
+                        <p className="text-gray-600 text-xs mb-3">{cert.certifierInfo.description}</p>
 
                         <div className="space-y-2 mb-3 text-xs text-gray-500 font-mono">
                           <p className="break-all">Type: {cert.type}</p>
