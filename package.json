@@ -1,5 +1,5 @@
 {
-  "name": "@bsv/peercert-ui",
+  "name": "@p2ppsr/peercert-ui",
   "private": true,
   "version": "1.0.0",
   "description": "PeerCert - Peer-to-peer certificate management UI",
@@ -9,7 +9,8 @@
     "lars:config": "lars config",
     "start": "lars start",
     "build": "cars build 1",
-    "deploy": "cars deploy now 1"
+    "predeploy": "cars project ensure-balance 1 --min 1 --topup-to 250000",
+    "deploy": "cars release now 1"
   },
   "keywords": [
     "peercert",
@@ -20,7 +21,7 @@
   "author": "",
   "license": "SEE LICENSE IN LICENSE.txt",
   "devDependencies": {
-    "@bsv/cars-cli": "^1.2.9",
-    "@bsv/lars": "^1.5.8"
+    "@p2ppsr/cars-cli": "^1.2.31",
+    "@p2ppsr/lars": "^1.5.12"
   }
 }

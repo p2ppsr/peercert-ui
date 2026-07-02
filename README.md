@@ -44,8 +44,8 @@ This project uses the **CARS** (Containerized Application Runtime System) archit
 
 - Node.js 18+
 - npm
-- LARS (Local Application Runtime System) - `npm i -g @bsv/lars`
-- CARS CLI - `npm i -g @bsv/cars-cli`
+- LARS (Local Application Runtime System) - `npm i -g @p2ppsr/lars`
+- CARS CLI - `npm i -g @p2ppsr/cars-cli`
 
 ### Installation & Development
 
@@ -76,6 +76,10 @@ npm run build
 # Deploy to CARS hosting
 npm run deploy
 ```
+
+`npm run deploy` verifies that the configured CARS project has at least 1 satoshi
+available for artifact upload before publishing. If the balance is low, it uses
+the current CARS CLI top-up flow to reconcile the balance up to 250,000 sats.
 
 ## Usage
 

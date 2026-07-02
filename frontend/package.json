@@ -1,5 +1,5 @@
 {
-  "name": "@bsv/peercert-ui",
+  "name": "@p2ppsr/peercert-ui-frontend",
   "private": true,
   "version": "1.0.0",
   "type": "module",
