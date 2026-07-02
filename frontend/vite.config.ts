@@ -15,6 +15,12 @@ export default defineConfig(({ mode }) => ({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+      // Replace Vite's node:crypto warning-Proxy stub with an inert empty
+      // module — @bsv/sdk probes node crypto on every hash, and the Proxy
+      // stub makes that probe pathologically slow (main-thread freezes
+      // during merkle-path verification).
+      "node:crypto": path.resolve(__dirname, "./src/shims/empty-crypto.ts"),
+      crypto: path.resolve(__dirname, "./src/shims/empty-crypto.ts"),
     },
   },
 }));

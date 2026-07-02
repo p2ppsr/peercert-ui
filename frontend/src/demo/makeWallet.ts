@@ -11,7 +11,10 @@ export interface WalletConfig {
 
 export default async function makeWallet(config: WalletConfig): Promise<WalletInterface> {
   if (config.type === 'local') {
-    return new WalletClient()
+    // Pin the JSON substrate: the default binary wire assumes spec-compliant
+    // 32-byte certificate types, and legacy certs with other type lengths
+    // come back corrupted (shifted certifier keys, garbled field names)
+    return new WalletClient('json-api')
   }
 
   if (!config.privateKey) {
@@ -26,21 +29,14 @@ export default async function makeWallet(config: WalletConfig): Promise<WalletIn
   const signer = new WalletSigner(chain, keyDeriver, storageManager)
   const services = new Services(chain)
 
-  const wallet = new Wallet(
-    signer,
-    services,
-    undefined,
-    new PrivilegedKeyManager(async (reason) => {
-      const key = window.prompt(
-        `Privileged key requested. Privileged keys are not stored in local storage by WUI. You will need to provide it every time. Reason:\n\n${reason}\n\nPaste your privileged key in hex. If no value provided, a random key will be generated instead:`
-      )
-      if (!key) {
-        return PrivateKey.fromRandom()
-      } else {
-        return new PrivateKey(key, 'hex')
-      }
-    })
-  )
+  const wallet = new Wallet(signer, services, undefined, new PrivilegedKeyManager(async (reason) => {
+    const key = window.prompt(`Privileged key requested. Privileged keys are not stored in local storage by WUI. You will need to provide it every time. Reason:\n\n${reason}\n\nPaste your privileged key in hex. If no value provided, a random key will be generated instead:`)
+    if (!key) {
+      return PrivateKey.fromRandom()
+    } else {
+      return new PrivateKey(key, 'hex')
+    }
+  }))
 
   const client = new StorageClient(wallet, storageURL)
   await client.makeAvailable()

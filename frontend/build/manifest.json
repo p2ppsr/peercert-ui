@@ -1,0 +1,84 @@
+{
+  "short_name": "PeerCert",
+  "name": "PeerCert — Skills you own, vouched for by real people",
+  "description": "Peer-to-peer skill endorsements that are digitally signed, owned by you, and portable across apps.",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "16x16 32x32 48x48 64x64",
+      "type": "image/x-icon"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#2563eb",
+  "background_color": "#f9fafb",
+  "metanet": {
+    "schemaVersion": 1,
+    "groupPermissions": {
+      "description": "PeerCert lets people vouch for each other's skills with signed, revocable endorsements they can keep, share privately, or publish for cross-app discovery.",
+      "protocolPermissions": [
+        {
+          "protocolID": [
+            1,
+            "identity key retrieval"
+          ],
+          "description": "Show your profile and address endorsements to you (getPublicKey with identityKey)."
+        },
+        {
+          "protocolID": [
+            1,
+            "identity resolution"
+          ],
+          "description": "Search for people by name or skill and show names/photos for endorsers (discoverByAttributes / discoverByIdentityKey)."
+        },
+        {
+          "protocolID": [
+            1,
+            "identity"
+          ],
+          "description": "Publish endorsements to public search and take them off again (lock/unlock identity tokens on the overlay network)."
+        },
+        {
+          "protocolID": [
+            1,
+            "messagebox"
+          ],
+          "description": "Send endorsements to peers and receive theirs via your MessageBox inbox."
+        }
+      ],
+      "basketAccess": [
+        {
+          "basket": "did",
+          "description": "Store the revocation token created with each endorsement you issue, so you can later revoke it."
+        }
+      ],
+      "certificateAccess": [],
+      "spendingAuthorization": {
+        "amount": 100000,
+        "description": "Create the small on-chain tokens (1 satoshi each, plus mining fees) that anchor endorsements, public listings, and revocations."
+      }
+    },
+    "counterpartyPermissions": {
+      "description": "Endorsements are exchanged directly with other people, so these protocols are used with a different counterparty for each peer you vouch for, receive from, or share proofs with.",
+      "protocols": [
+        {
+          "protocolName": "certificate signature",
+          "description": "Sign endorsements you issue and verify the signatures on endorsements you receive."
+        },
+        {
+          "protocolName": "certificate field encryption",
+          "description": "Encrypt endorsement details for the recipient, unlock your own for display, and create keyrings that reveal selected details to a chosen verifier."
+        },
+        {
+          "protocolName": "did token",
+          "description": "Create and spend the revocation token tied to each endorsement's subject."
+        },
+        {
+          "protocolName": "auth message signature",
+          "description": "Mutually authenticate with the MessageBox server and peers when exchanging endorsements."
+        }
+      ]
+    }
+  }
+}

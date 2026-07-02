@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, ReactNode } from 'react'
-import type { WalletInterface } from '@bsv/sdk'
+import { WalletInterface } from '@bsv/sdk'
 
 interface WalletContextType {
   wallet: WalletInterface | null

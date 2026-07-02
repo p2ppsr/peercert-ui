@@ -74,3 +74,26 @@ All colors MUST be HSL.
     @apply bg-background text-foreground;
   }
 }
+
+/* Compact variant for @bsv/identity-react's IdentityCard (no size prop). */
+.identity-chip-sm .MuiAvatar-root {
+  width: 1.75em !important;
+  height: 1.75em !important;
+}
+.identity-chip-sm .MuiTypography-h6 {
+  font-size: 0.85rem !important;
+  line-height: 1.2 !important;
+}
+.identity-chip-sm .MuiTypography-body2 {
+  font-size: 0.68rem !important;
+}
+.identity-chip-sm .MuiCardContent-root {
+  padding: 2px 6px !important;
+}
+.identity-chip-sm .MuiCardContent-root:last-child {
+  padding-bottom: 2px !important;
+}
+.identity-chip-sm .MuiBadge-badge .MuiIcon-root {
+  width: 14px !important;
+  height: 14px !important;
+}
