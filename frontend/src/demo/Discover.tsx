@@ -1,10 +1,9 @@
 import { useState, useCallback } from 'react'
 import { Search, ChevronDown, ChevronRight, Plus, Trash2, ShieldCheck, ShieldAlert, BadgeCheck, EyeOff } from 'lucide-react'
-import { PeerCert } from 'peercert'
 import type { RevocationStatus } from 'peercert'
 import { WalletInterface, IdentityClient } from '@bsv/sdk'
 import { IdentityCard } from '@bsv/identity-react'
-import { certTitle } from './certs'
+import { certTitle, makePeerCert } from './certs'
 import { ErrorBanner, PrimaryButton, KeyAvatar, TechnicalDetails, FieldChips, useConfirm } from './ui'
 
 interface DiscoverProps {
@@ -104,7 +103,7 @@ export default function Discover({ wallet, identityKey }: DiscoverProps) {
   const handleCheckValidity = async (cert: PublicCertificate) => {
     try {
       setBusyAction(`check-${cert.serialNumber}`)
-      const peercert = new PeerCert(wallet)
+      const peercert = makePeerCert(wallet)
       const status = await peercert.checkRevocation({
         revocationOutpoint: cert.revocationOutpoint,
         serialNumber: cert.serialNumber,
@@ -133,7 +132,7 @@ export default function Discover({ wallet, identityKey }: DiscoverProps) {
     if (!ok) return
     try {
       setBusyAction(`revoke-${cert.serialNumber}`)
-      const peercert = new PeerCert(wallet)
+      const peercert = makePeerCert(wallet)
       const result = await peercert.revoke({
         revocationOutpoint: cert.revocationOutpoint,
         serialNumber: cert.serialNumber,

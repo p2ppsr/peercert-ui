@@ -1,11 +1,10 @@
 import { useState, useEffect, useCallback } from 'react'
 import { RefreshCw, Award, Globe2, EyeOff, Send, ShieldCheck, ShieldAlert, BadgeCheck, Linkedin, Copy, Check, ExternalLink } from 'lucide-react'
-import { PeerCert } from 'peercert'
 import type { RevocationStatus } from 'peercert'
 import { WalletInterface, WalletCertificate, IdentityClient } from '@bsv/sdk'
 import { IdentitySearchField, IdentityCard } from '@bsv/identity-react'
 import { cn } from '@/lib/utils'
-import { isSkillCert, splitSkillFields, levelStyle, truncateKey, certTitle, decryptCertFields, normalizeLevel } from './certs'
+import { isSkillCert, splitSkillFields, levelStyle, truncateKey, certTitle, decryptCertFields, normalizeLevel, makePeerCert } from './certs'
 import { ErrorBanner, SuccessBanner, PrimaryButton, SecondaryButton, KeyAvatar, TechnicalDetails, Modal, FieldChips, SealedFields, CardMenu, Disclosure, ProgressBar, useConfirm } from './ui'
 
 interface MySkillsProps {
@@ -155,7 +154,7 @@ export default function MySkills({ wallet, identityKey, profile, refreshToken, o
     try {
       setModalBusy(true)
       setModalError(null)
-      const peercert = new PeerCert(wallet)
+      const peercert = makePeerCert(wallet)
       const result = await peercert.reveal({
         certificate: activeCert,
         fieldsToReveal: selectedFields
@@ -178,7 +177,7 @@ export default function MySkills({ wallet, identityKey, profile, refreshToken, o
     try {
       setModalBusy(true)
       setModalError(null)
-      const peercert = new PeerCert(wallet)
+      const peercert = makePeerCert(wallet)
       const verifiableCert = await peercert.createVerifiableCertificate({
         certificate: activeCert,
         verifierPublicKey: verifier.identityKey,
@@ -227,7 +226,7 @@ export default function MySkills({ wallet, identityKey, profile, refreshToken, o
     try {
       setBusyAction(`check-${cert.serialNumber}`)
       setActionError(null)
-      const peercert = new PeerCert(wallet)
+      const peercert = makePeerCert(wallet)
       const status = await peercert.checkRevocation(cert)
       setStatuses(prev => ({ ...prev, [cert.serialNumber]: status }))
     } catch (err) {
@@ -276,7 +275,7 @@ export default function MySkills({ wallet, identityKey, profile, refreshToken, o
     try {
       setBusyAction(`revoke-${cert.serialNumber}`)
       setActionError(null)
-      const peercert = new PeerCert(wallet)
+      const peercert = makePeerCert(wallet)
       const result = await peercert.revoke(cert)
       if (!result.success) throw new Error(result.error || 'Could not revoke it.')
       await handleCheckValidity(cert)

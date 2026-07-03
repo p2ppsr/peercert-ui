@@ -5,7 +5,7 @@ import type { IncomingCertificate, VerifyVerifiableCertificateResult } from 'pee
 import { WalletInterface, MasterCertificate } from '@bsv/sdk'
 import { IdentityCard } from '@bsv/identity-react'
 import { cn } from '@/lib/utils'
-import { isSkillCert, levelStyle, normalizeLevel } from './certs'
+import { isSkillCert, levelStyle, normalizeLevel, makePeerCert } from './certs'
 import { ErrorBanner, SuccessBanner, PrimaryButton, SecondaryButton, TechnicalDetails, FieldChips, SealedFields } from './ui'
 
 interface InboxProps {
@@ -34,7 +34,7 @@ export default function Inbox({ wallet, onAccepted }: InboxProps) {
     try {
       setIsLoading(true)
       setError(null)
-      const peercert = new PeerCert(wallet)
+      const peercert = makePeerCert(wallet)
       const incoming = await peercert.listIncomingCertificates()
       setCertificates(incoming)
       // Incoming certs carry their master keyring — decrypt fields in the
@@ -70,7 +70,7 @@ export default function Inbox({ wallet, onAccepted }: InboxProps) {
     try {
       setProcessing(cert.messageId)
       setActionError(null)
-      const peercert = new PeerCert(wallet)
+      const peercert = makePeerCert(wallet)
       const result = await peercert.receive(cert.serializedCertificate)
       if (!result.success) throw new Error(result.error || 'Could not add this endorsement.')
       await peercert.acknowledgeCertificate(cert.messageId)
@@ -88,7 +88,7 @@ export default function Inbox({ wallet, onAccepted }: InboxProps) {
     try {
       setProcessing(cert.messageId)
       setActionError(null)
-      const peercert = new PeerCert(wallet)
+      const peercert = makePeerCert(wallet)
       await peercert.acknowledgeCertificate(cert.messageId)
       setCertificates(prev => prev.filter(c => c.messageId !== cert.messageId))
     } catch (err) {
@@ -102,7 +102,7 @@ export default function Inbox({ wallet, onAccepted }: InboxProps) {
   const handleVerify = async (cert: IncomingCertificate) => {
     try {
       setVerifying(cert.messageId)
-      const peercert = new PeerCert(wallet)
+      const peercert = makePeerCert(wallet)
       const result = await peercert.verifyVerifiableCertificate(cert.serializedCertificate, {
         checkRevocation: true
       })
@@ -129,7 +129,7 @@ export default function Inbox({ wallet, onAccepted }: InboxProps) {
     try {
       setPasteBusy(true)
       setPasteError(null)
-      const peercert = new PeerCert(wallet)
+      const peercert = makePeerCert(wallet)
       const input = pasteInput.trim()
       let certData: string
       if (input.startsWith('{')) {

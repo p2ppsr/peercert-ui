@@ -1,4 +1,5 @@
 import { Utils, MasterCertificate, WalletInterface, WalletCertificate } from '@bsv/sdk'
+import { PeerCert } from 'peercert'
 
 // Well-known certificate type for skill endorsements issued by this app.
 // Must serialize to exactly 32 bytes so every PeerCert user can find each
@@ -138,4 +139,19 @@ export function isImageUrl(value: string): boolean {
 
 export function isUrl(value: string): boolean {
   return /^https?:\/\/\S+$/i.test(value.trim())
+}
+
+/**
+ * Demo shortcut: pin the MessageBox server instead of resolving each
+ * recipient's advertised host from the overlay network. The lookup adds a
+ * network round-trip (plus BEEF parsing) to every send; for the demo,
+ * everyone lives on the default public host anyway.
+ */
+export const MESSAGEBOX_HOST = 'https://messagebox.babbage.systems'
+
+export function makePeerCert(wallet: WalletInterface): PeerCert {
+  const peercert = new PeerCert(wallet, { messageBoxHost: MESSAGEBOX_HOST })
+  const client = (peercert as any).getMessageBoxClient()
+  client.resolveHostForRecipient = async () => MESSAGEBOX_HOST
+  return peercert
 }

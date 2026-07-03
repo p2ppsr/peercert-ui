@@ -4,7 +4,7 @@ import { PeerCert } from 'peercert'
 import { WalletInterface, Utils } from '@bsv/sdk'
 import { IdentitySearchField } from '@bsv/identity-react'
 import { cn } from '@/lib/utils'
-import { SKILL_CERT_TYPE, SKILL_LEVELS, levelStyle, truncateKey } from './certs'
+import { SKILL_CERT_TYPE, SKILL_LEVELS, levelStyle, truncateKey, makePeerCert } from './certs'
 import { ErrorBanner, PrimaryButton, KeyAvatar, ProgressBar } from './ui'
 
 interface VouchProps {
@@ -77,7 +77,7 @@ export default function Vouch({ wallet }: VouchProps) {
 
     try {
       setIsSending(true)
-      const peercert = new PeerCert(wallet)
+      const peercert = makePeerCert(wallet)
       const masterCert = await peercert.issue({
         certificateType,
         subjectIdentityKey: person.identityKey,
