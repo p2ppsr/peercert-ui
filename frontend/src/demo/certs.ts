@@ -1,4 +1,14 @@
-import { Utils, MasterCertificate, WalletInterface, WalletCertificate } from '@bsv/sdk'
+import {
+  Utils,
+  MasterCertificate,
+  WalletInterface,
+  WalletCertificate,
+  LookupResolver,
+  Transaction,
+  PushDrop,
+  VerifiableCertificate,
+  ProtoWallet
+} from '@bsv/sdk'
 import { PeerCert } from 'peercert'
 
 // Well-known certificate type for skill endorsements issued by this app.
@@ -141,6 +151,73 @@ export function isImageUrl(value: string): boolean {
 
 export function isUrl(value: string): boolean {
   return /^https?:\/\/\S+$/i.test(value.trim())
+}
+
+/** A publicly revealed certificate parsed straight from the identity overlay. */
+export interface RevealedCert {
+  type: string
+  subject: string
+  serialNumber: string
+  certifier: string
+  revocationOutpoint: string
+  decryptedFields: Record<string, string>
+}
+
+/**
+ * Search publicly revealed certificates directly on the ls_identity overlay.
+ *
+ * Unlike wallet.discoverByAttributes, results are NOT filtered by the
+ * viewer's trusted-certifier settings — peer-issued endorsements from any
+ * certifier show up. Every result is signature-verified, and revealed fields
+ * decrypt with the well-known 'anyone' key (that's what a public reveal is).
+ * Needs no wallet at all.
+ */
+export async function searchRevealedCerts(
+  attributes: Record<string, string>,
+  networkPreset: 'mainnet' | 'testnet' = 'mainnet'
+): Promise<RevealedCert[]> {
+  const resolver = new LookupResolver({ networkPreset })
+  const answer = await resolver.query(
+    { service: 'ls_identity', query: { attributes } },
+    15000
+  )
+  if (answer.type !== 'output-list') return []
+
+  const anyone = new ProtoWallet('anyone')
+  const results: RevealedCert[] = []
+  const seen = new Set<string>()
+  for (const output of answer.outputs) {
+    try {
+      const tx = Transaction.fromBEEF(output.beef)
+      const decoded = PushDrop.decode(tx.outputs[output.outputIndex].lockingScript)
+      const data = JSON.parse(Utils.toUTF8(decoded.fields[0]))
+      if (!data.serialNumber || seen.has(data.serialNumber)) continue
+      const cert = new VerifiableCertificate(
+        data.type,
+        data.serialNumber,
+        data.subject,
+        data.certifier,
+        data.revocationOutpoint,
+        data.fields,
+        data.keyring,
+        data.signature
+      )
+      const decryptedFields = await cert.decryptFields(anyone)
+      await cert.verify()
+      seen.add(data.serialNumber)
+      results.push({
+        type: data.type ?? '',
+        subject: data.subject ?? '',
+        serialNumber: data.serialNumber,
+        certifier: data.certifier ?? '',
+        revocationOutpoint: data.revocationOutpoint ?? '',
+        decryptedFields
+      })
+    } catch {
+      // Skip malformed or unverifiable tokens — they can't block the rest
+    }
+  }
+  return results
 }
 
 /**

@@ -3,8 +3,8 @@ import { Search, ChevronDown, ChevronRight, Plus, Trash2, ShieldCheck, ShieldAle
 import type { RevocationStatus } from 'peercert'
 import { WalletInterface, IdentityClient } from '@bsv/sdk'
 import { IdentityCard } from '@bsv/identity-react'
-import { certTitle, makePeerCert } from './certs'
-import { ErrorBanner, PrimaryButton, KeyAvatar, TechnicalDetails, FieldChips, useConfirm } from './ui'
+import { certTitle, makePeerCert, searchRevealedCerts } from './certs'
+import { ErrorBanner, PrimaryButton, TechnicalDetails, FieldChips, useConfirm } from './ui'
 
 interface DiscoverProps {
   wallet: WalletInterface
@@ -16,12 +16,6 @@ interface PublicCertificate {
   subject: string
   serialNumber: string
   certifier: string
-  certifierInfo: {
-    name: string
-    iconURL: string
-    description: string
-    trust: number
-  }
   decryptedFields: Record<string, string>
   revocationOutpoint: string
 }
@@ -65,30 +59,19 @@ export default function Discover({ wallet, identityKey }: DiscoverProps) {
       setError(null)
       setHasSearched(true)
 
-      const searchParams: any = { attributes }
-      if (certifierFilter.trim()) searchParams.certifier = certifierFilter.trim()
-
-      const discovered = await wallet.discoverByAttributes(searchParams)
-      const seen = new Set<string>()
-      const certs: PublicCertificate[] = []
-      for (const cert of (discovered.certificates || []) as any[]) {
-        const serial = cert.serialNumber || ''
-        if (seen.has(serial)) continue
-        seen.add(serial)
-        certs.push({
-          type: cert.type || '',
-          subject: cert.subject || '',
-          serialNumber: serial,
-          certifier: cert.certifier || '',
-          certifierInfo: {
-            name: cert.certifierInfo?.name || 'Someone',
-            iconURL: cert.certifierInfo?.iconURL || '',
-            description: cert.certifierInfo?.description || '',
-            trust: cert.certifierInfo?.trust || 0
-          },
-          decryptedFields: cert.decryptedFields || {},
-          revocationOutpoint: cert.revocationOutpoint || ''
-        })
+      // Query the identity overlay directly: unlike wallet.discoverByAttributes,
+      // results aren't filtered by the viewer's trusted-certifier settings, so
+      // peer-issued endorsements from any certifier are discoverable.
+      let preset: 'mainnet' | 'testnet' = 'mainnet'
+      try {
+        const { network } = await wallet.getNetwork({})
+        preset = network === 'testnet' ? 'testnet' : 'mainnet'
+      } catch {
+        // No wallet connected — public search works without one
+      }
+      let certs: PublicCertificate[] = await searchRevealedCerts(attributes, preset)
+      if (certifierFilter.trim()) {
+        certs = certs.filter(c => c.certifier === certifierFilter.trim())
       }
       setResults(certs)
     } catch (err) {
@@ -352,15 +335,16 @@ export default function Discover({ wallet, identityKey }: DiscoverProps) {
                             <FieldChips fields={cert.decryptedFields} omit={['note']} />
                           </div>
 
-                          {/* Vouched by */}
+                          {/* Vouched by — IdentityCard resolves the certifier's public name/photo */}
                           <div className="mt-3 flex items-center gap-2">
-                            <KeyAvatar identityKey={cert.certifier} size="sm" imageUrl={cert.certifierInfo.iconURL || undefined} />
-                            <p className="text-xs text-gray-500">
-                              Vouched for by{' '}
-                              <span className="font-medium text-gray-700">
-                                {iVouched ? 'you' : cert.certifierInfo.name}
-                              </span>
-                            </p>
+                            <p className="text-xs text-gray-500 shrink-0">Vouched for by</p>
+                            {iVouched ? (
+                              <span className="text-xs font-medium text-gray-700">you</span>
+                            ) : (
+                              <div className="identity-chip-sm">
+                                <IdentityCard identityKey={cert.certifier} themeMode="light" />
+                              </div>
+                            )}
                             <div className="flex-1" />
                             <button
                               onClick={() => handleCheckValidity(cert)}
