@@ -2,8 +2,10 @@ import { Utils, MasterCertificate, WalletInterface, WalletCertificate } from '@b
 import { PeerCert } from 'peercert'
 
 // Well-known certificate type for skill endorsements issued by this app.
-// Must serialize to exactly 32 bytes so every PeerCert user can find each
-// other's endorsements under the same type.
+// A fixed base64 identifier (31 bytes of label text) so every PeerCert user
+// finds each other's endorsements under the same type. peercert passes valid
+// base64 types through unchanged, so this exact value is preserved on-chain —
+// do not change it, or existing endorsements become undiscoverable.
 export const SKILL_CERT_TYPE = Utils.toBase64(
   Utils.toArray('peercert-skill-endorsement-v001', 'utf8')
 )

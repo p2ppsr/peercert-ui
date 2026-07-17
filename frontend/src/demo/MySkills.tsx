@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { RefreshCw, Award, Globe2, EyeOff, Send, ShieldCheck, ShieldAlert, BadgeCheck, Linkedin, Copy, Check, ExternalLink } from 'lucide-react'
 import type { RevocationStatus } from 'peercert'
 import { WalletInterface, WalletCertificate, IdentityClient } from '@bsv/sdk'
@@ -27,6 +27,9 @@ export default function MySkills({ wallet, identityKey, profile, refreshToken, o
   const [decrypted, setDecrypted] = useState<Record<string, Record<string, string> | null>>({})
   // serials of certs currently discoverable in public search
   const [publicSerials, setPublicSerials] = useState<Set<string>>(new Set())
+  // Guards against out-of-order discover responses clobbering newer state
+  // (including the optimistic updates from make public / make private)
+  const publicLookupSeq = useRef(0)
 
   const [modal, setModal] = useState<ModalKind>(null)
   const [activeCert, setActiveCert] = useState<WalletCertificate | null>(null)
@@ -57,13 +60,21 @@ export default function MySkills({ wallet, identityKey, profile, refreshToken, o
           setDecrypted(prev => ({ ...prev, [cert.serialNumber]: fields }))
         })
       })
-      // Check which of these are already publicly discoverable
+      // Check which of these are already publicly discoverable.
+      // The default discover limit is 10, which would wrongly show any
+      // further public certs as private — ask for far more than a profile holds.
       if (identityKey) {
-        wallet.discoverByIdentityKey({ identityKey })
-          .then(disc => setPublicSerials(new Set(
-            (disc.certificates || []).map((c: any) => c.serialNumber)
-          )))
-          .catch(() => setPublicSerials(new Set()))
+        const seq = ++publicLookupSeq.current
+        wallet.discoverByIdentityKey({ identityKey, limit: 1000 })
+          .then(disc => {
+            if (seq !== publicLookupSeq.current) return // stale response
+            setPublicSerials(new Set(
+              (disc.certificates || []).map((c: any) => c.serialNumber)
+            ))
+          })
+          // On failure keep the last known state — resetting to "all private"
+          // would invite duplicate reveals of already-public certs
+          .catch(() => { })
       }
     } catch (err) {
       console.error('Error loading certificates:', err)
@@ -162,6 +173,7 @@ export default function MySkills({ wallet, identityKey, profile, refreshToken, o
       if (result.status !== 'success') {
         throw new Error(('description' in result && result.description) || 'Could not publish. Try again.')
       }
+      publicLookupSeq.current++ // invalidate any in-flight lookup
       setPublicSerials(prev => new Set(prev).add(activeCert.serialNumber))
       setModalDone('Done! Anyone can now find and verify these details about you.')
     } catch (err) {
@@ -209,6 +221,7 @@ export default function MySkills({ wallet, identityKey, profile, refreshToken, o
       setActionError(null)
       const identityClient = new IdentityClient(wallet)
       await identityClient.revokeCertificateRevelation(cert.serialNumber)
+      publicLookupSeq.current++ // invalidate any in-flight lookup
       setPublicSerials(prev => {
         const next = new Set(prev)
         next.delete(cert.serialNumber)
@@ -340,7 +353,7 @@ export default function MySkills({ wallet, identityKey, profile, refreshToken, o
               label: 'Revoke',
               onClick: () => handleTakeBack(cert),
               danger: true,
-              disabled: busyAction === `revoke-${cert.serialNumber}` || status?.isRevoked,
+              disabled: busyAction === `revoke-${cert.serialNumber}` || status?.status === 'revoked',
               title: 'Permanently invalidate this endorsement you issued — cannot be undone'
             }] : []),
             {
@@ -389,14 +402,24 @@ export default function MySkills({ wallet, identityKey, profile, refreshToken, o
         {status && (
           <div className={cn(
             'mt-4 flex items-start gap-2.5 p-3.5 rounded-xl border',
-            status.isRevoked ? 'bg-red-50 border-red-100' : 'bg-emerald-50 border-emerald-100'
+            status.status === 'revoked' ? 'bg-red-50 border-red-100'
+              : status.status === 'unknown' ? 'bg-amber-50 border-amber-100'
+                : 'bg-emerald-50 border-emerald-100'
           )}>
-            {status.isRevoked ? (
+            {status.status === 'revoked' ? (
               <>
                 <ShieldAlert className="w-5 h-5 text-red-500 shrink-0" />
                 <div>
                   <p className="text-sm font-semibold text-red-900">No longer valid</p>
                   <p className="text-xs text-red-700 mt-0.5">This endorsement was revoked by whoever issued it.</p>
+                </div>
+              </>
+            ) : status.status === 'unknown' ? (
+              <>
+                <ShieldAlert className="w-5 h-5 text-amber-500 shrink-0" />
+                <div>
+                  <p className="text-sm font-semibold text-amber-900">Couldn't check right now</p>
+                  <p className="text-xs text-amber-700 mt-0.5">The network didn't answer — try again in a moment.</p>
                 </div>
               </>
             ) : (

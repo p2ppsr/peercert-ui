@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
 import { RefreshCw, Inbox as InboxIcon, ChevronDown, ChevronRight, BadgeCheck, ShieldAlert, ShieldCheck, ClipboardPaste } from 'lucide-react'
-import { PeerCert } from 'peercert'
 import type { IncomingCertificate, VerifyVerifiableCertificateResult } from 'peercert'
 import { WalletInterface, MasterCertificate } from '@bsv/sdk'
 import { IdentityCard } from '@bsv/identity-react'
@@ -130,19 +129,14 @@ export default function Inbox({ wallet, onAccepted }: InboxProps) {
       setPasteBusy(true)
       setPasteError(null)
       const peercert = makePeerCert(wallet)
-      const input = pasteInput.trim()
-      let certData: string
-      if (input.startsWith('{')) {
-        certData = input
-      } else {
-        try {
-          certData = JSON.stringify(PeerCert.decodeCertificate(input))
-        } catch {
-          throw new Error("That code doesn't look right. Double-check you copied the whole thing.")
-        }
+      // receive() accepts both certificate JSON and compact share codes
+      const result = await peercert.receive(pasteInput.trim())
+      if (!result.success) {
+        const err = result.error || ''
+        throw new Error(/malformed|unsupported|unexpected|json/i.test(err)
+          ? "That code doesn't look right. Double-check you copied the whole thing."
+          : err || 'Could not add this endorsement.')
       }
-      const result = await peercert.receive(certData)
-      if (!result.success) throw new Error(result.error || 'Could not add this endorsement.')
       setPasteSuccess(true)
       setPasteInput('')
       onAccepted?.()
@@ -257,21 +251,40 @@ export default function Inbox({ wallet, onAccepted }: InboxProps) {
                   </div>
                 )}
 
-                {/* Verification result for shared proofs */}
+                {/* Verification result for shared proofs.
+                    Revoked proofs fail closed (verified: false); a verified
+                    proof whose revocation lookup failed shows as amber. */}
                 {verifyResult && (
                   <div className={cn(
                     'mt-4 p-4 rounded-xl border',
-                    verifyResult.verified && !verifyResult.revocationStatus?.isRevoked
-                      ? 'bg-emerald-50 border-emerald-100'
-                      : 'bg-red-50 border-red-100'
+                    !verifyResult.verified ? 'bg-red-50 border-red-100'
+                      : verifyResult.revocationStatus?.status === 'unknown'
+                        ? 'bg-amber-50 border-amber-100'
+                        : 'bg-emerald-50 border-emerald-100'
                   )}>
-                    {verifyResult.verified && !verifyResult.revocationStatus?.isRevoked ? (
+                    {verifyResult.verified ? (
                       <div className="flex items-start gap-2.5">
-                        <ShieldCheck className="w-5 h-5 text-emerald-600 shrink-0" />
+                        {verifyResult.revocationStatus?.status === 'unknown' ? (
+                          <ShieldAlert className="w-5 h-5 text-amber-500 shrink-0" />
+                        ) : (
+                          <ShieldCheck className="w-5 h-5 text-emerald-600 shrink-0" />
+                        )}
                         <div className="flex-1">
-                          <p className="text-sm font-semibold text-emerald-900">This proof checks out</p>
-                          <p className="text-xs text-emerald-700 mt-0.5">
-                            Genuinely signed and still valid.
+                          <p className={cn(
+                            'text-sm font-semibold',
+                            verifyResult.revocationStatus?.status === 'unknown' ? 'text-amber-900' : 'text-emerald-900'
+                          )}>
+                            {verifyResult.revocationStatus?.status === 'unknown'
+                              ? 'Signed correctly, but…'
+                              : 'This proof checks out'}
+                          </p>
+                          <p className={cn(
+                            'text-xs mt-0.5',
+                            verifyResult.revocationStatus?.status === 'unknown' ? 'text-amber-700' : 'text-emerald-700'
+                          )}>
+                            {verifyResult.revocationStatus?.status === 'unknown'
+                              ? "We couldn't confirm it hasn't been revoked — the network didn't answer. Try again in a moment."
+                              : 'Genuinely signed and still valid.'}
                           </p>
                           {verifyResult.fields && Object.keys(verifyResult.fields).length > 0 && (
                             <div className="mt-3 bg-white rounded-lg p-3 border border-emerald-100 space-y-1">
@@ -290,7 +303,7 @@ export default function Inbox({ wallet, onAccepted }: InboxProps) {
                         <ShieldAlert className="w-5 h-5 text-red-500 shrink-0" />
                         <div>
                           <p className="text-sm font-semibold text-red-900">
-                            {verifyResult.revocationStatus?.isRevoked
+                            {verifyResult.revocationStatus?.status === 'revoked'
                               ? 'This endorsement was revoked'
                               : "This proof doesn't check out"}
                           </p>

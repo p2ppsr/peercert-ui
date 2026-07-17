@@ -329,9 +329,13 @@ export default function Discover({ wallet, identityKey }: DiscoverProps) {
                           <div className="flex items-start justify-between gap-3">
                             <p className="text-sm font-semibold text-gray-800">{certTitle(cert.type)}</p>
                             {status && (
-                              status.isRevoked ? (
+                              status.status === 'revoked' ? (
                                 <span className="inline-flex items-center gap-1 text-xs font-medium text-red-600">
                                   <ShieldAlert className="w-3.5 h-3.5" /> Revoked
+                                </span>
+                              ) : status.status === 'unknown' ? (
+                                <span className="inline-flex items-center gap-1 text-xs font-medium text-amber-600">
+                                  <ShieldAlert className="w-3.5 h-3.5" /> Couldn't check
                                 </span>
                               ) : (
                                 <span className="inline-flex items-center gap-1 text-xs font-medium text-emerald-600">
@@ -369,7 +373,7 @@ export default function Discover({ wallet, identityKey }: DiscoverProps) {
                             {iVouched && (
                               <button
                                 onClick={() => handleTakeBack(cert)}
-                                disabled={busyAction === `revoke-${cert.serialNumber}` || status?.isRevoked}
+                                disabled={busyAction === `revoke-${cert.serialNumber}` || status?.status === 'revoked'}
                                 title="Permanently invalidate this endorsement you issued — everywhere, for everyone. Cannot be undone."
                                 className="text-xs text-red-400 hover:text-red-600 transition-colors disabled:opacity-50"
                               >

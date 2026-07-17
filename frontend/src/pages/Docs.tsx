@@ -52,13 +52,13 @@ const docSections = [
         {
           title: "Create a PeerCert instance",
           content:
-            "import { Utils, WalletClient } from '@bsv/sdk';\nimport { PeerCert } from 'peercert';\n\n// Default wallet\nconst peercert = new PeerCert();\n\n// With a custom WalletClient and options\nconst wallet = new WalletClient();\nconst peercertWithOptions = new PeerCert(wallet, {\n  originator: 'myapp.com',\n  networkPreset: 'mainnet',\n});",
+            "import { WalletClient } from '@bsv/sdk';\nimport { PeerCert } from 'peercert';\n\n// Default wallet\nconst peercert = new PeerCert();\n\n// With a custom WalletClient and options\nconst wallet = new WalletClient();\nconst peercertWithOptions = new PeerCert(wallet, {\n  originator: 'myapp.com',\n  networkPreset: 'mainnet',\n});",
           code: true
         },
         {
           title: "Auto-send via MessageBox",
           content:
-            "import { Utils } from '@bsv/sdk';\nimport { PeerCert } from 'peercert';\n\nconst peercert = new PeerCert();\n\nawait peercert.issue({\n  certificateType: Utils.toBase64(Utils.toArray('employment', 'utf8')),\n  subjectIdentityKey: '03abc123...', // recipient identity key\n  fields: {\n    role: 'Engineer',\n    company: 'ACME Corp',\n    start_date: '2024-01-15',\n  },\n  autoSend: true, // automatically sends via MessageBox\n});",
+            "import { PeerCert } from 'peercert';\n\nconst peercert = new PeerCert();\n\nawait peercert.issue({\n  certificateType: 'employment', // names are normalized automatically\n  subjectIdentityKey: '03abc123...', // recipient identity key\n  fields: {\n    role: 'Engineer',\n    company: 'ACME Corp',\n    start_date: '2024-01-15',\n  },\n  autoSend: true, // automatically sends via MessageBox\n});",
           code: true
         }
       ]
@@ -76,7 +76,7 @@ const docSections = [
         {
           title: "Issue without auto-send (manual delivery)",
           content:
-            "import { Utils } from '@bsv/sdk';\nimport { PeerCert } from 'peercert';\n\nconst peercert = new PeerCert();\n\nconst masterCert = await peercert.issue({\n  certificateType: Utils.toBase64(Utils.toArray('employment', 'utf8')),\n  subjectIdentityKey: '03abc123...',\n  fields: {\n    role: 'Engineer',\n    company: 'ACME Corp',\n  },\n  autoSend: false,\n});\n\n// Send via MessageBox manually\nawait peercert.send({\n  recipient: '03abc123...',\n  serializedCertificate: JSON.stringify(masterCert),\n});\n\n// Or send via QR / NFC / file using the serialized JSON\nconst serialized = JSON.stringify(masterCert);",
+            "import { PeerCert } from 'peercert';\n\nconst peercert = new PeerCert();\n\nconst masterCert = await peercert.issue({\n  certificateType: 'employment',\n  subjectIdentityKey: '03abc123...',\n  fields: {\n    role: 'Engineer',\n    company: 'ACME Corp',\n  },\n  autoSend: false,\n});\n\n// Send via MessageBox manually\nawait peercert.send({\n  recipient: '03abc123...',\n  serializedCertificate: JSON.stringify(masterCert),\n});\n\n// Or send via QR / NFC / file using the compact format\nconst compact = PeerCert.encodeCertificate(masterCert);",
           code: true
         },
         {
@@ -88,7 +88,7 @@ const docSections = [
         {
           title: "Receive from QR / file / other channels",
           content:
-            "// If you already have the certificate JSON string\nawait peercert.receive(serializedCertificateString);\n\n// Or from a parsed MasterCertificate object\nawait peercert.receive(masterCertificateObject);",
+            "// receive() accepts every delivery format:\n\n// Certificate JSON string\nawait peercert.receive(serializedCertificateString);\n\n// Compact base64 string (QR code / URL / share code)\nawait peercert.receive(compactBase64String);\n\n// Raw binary from an NFC tag or file\nawait peercert.receive(uint8ArrayFromNfc);\n\n// Or a parsed MasterCertificate object\nawait peercert.receive(masterCertificateObject);",
           code: true
         }
       ]
@@ -106,13 +106,13 @@ const docSections = [
         {
           title: "Create a verifiable certificate",
           content:
-            "// List certificates from your wallet (with keyring)\nconst certs = await wallet.listCertificates({\n  certifiersRequired: ['all'],\n  limit: 1,\n});\n\nconst verifiableCert = await peercert.createVerifiableCertificate({\n  certificate: certs.certificates[0],\n  verifierPublicKey: '03verifier...',\n  fieldsToReveal: ['role', 'company'],\n});\n\n// Send to the verifier via MessageBox\nawait peercert.send({\n  recipient: '03verifier...',\n  serializedCertificate: JSON.stringify(verifiableCert),\n  issuance: false, // inspection only\n});",
+            "// List certificates from your wallet\nconst certs = await peercert.listCertificates({ limit: 1 });\n\nconst verifiableCert = await peercert.createVerifiableCertificate({\n  certificate: certs[0],\n  verifierPublicKey: '03verifier...',\n  fieldsToReveal: ['role', 'company'],\n});\n\n// Send to the verifier via MessageBox\nawait peercert.send({\n  recipient: '03verifier...',\n  serializedCertificate: JSON.stringify(verifiableCert),\n  issuance: false, // inspection only\n});",
           code: true
         },
         {
           title: "Verify a shared certificate",
           content:
-            "const incoming = await peercert.listIncomingCertificates();\n\nfor (const cert of incoming) {\n  const result = await peercert.verifyVerifiableCertificate(\n    cert.serializedCertificate,\n    { checkRevocation: true },\n  );\n\n  if (result.verified) {\n    if (result.revocationStatus?.isRevoked) {\n      console.log('⚠️ Certificate has been revoked');\n    } else {\n      console.log('✅ Certificate is valid');\n      console.log('Revealed fields:', result.fields);\n    }\n  } else {\n    console.error('Verification failed:', result.error);\n  }\n}",
+            "const incoming = await peercert.listIncomingCertificates();\n\nfor (const cert of incoming) {\n  const result = await peercert.verifyVerifiableCertificate(\n    cert.serializedCertificate,\n    { checkRevocation: true }, // revoked certs fail closed (verified: false)\n  );\n\n  if (result.verified && result.revocationStatus?.status === 'valid') {\n    console.log('✅ Certificate is valid');\n    console.log('Revealed fields:', result.fields);\n  } else if (result.revocationStatus?.status === 'unknown') {\n    console.log('❓ Signed correctly, but revocation could not be checked');\n  } else {\n    console.error('Rejected:', result.error);\n  }\n}",
           code: true
         }
       ]
@@ -130,19 +130,19 @@ const docSections = [
         {
           title: "Publicly reveal certificate fields",
           content:
-            "// Get a WalletCertificate from your wallet\nconst certs = await wallet.listCertificates({\n  certifiers: [issuerPublicKey],\n  types: [certificateTypeBase64],\n});\n\nconst broadcastResult = await peercert.reveal({\n  certificate: certs.certificates[0],\n  fieldsToReveal: ['role', 'company'],\n});\n\nconsole.log('Revealed on overlay, txid:', broadcastResult.txid);",
+            "// Get a certificate from your wallet\nconst certs = await peercert.listCertificates({\n  certifiers: [issuerPublicKey],\n  types: ['employment'], // same value you issued with\n});\n\nconst broadcastResult = await peercert.reveal({\n  certificate: certs[0],\n  fieldsToReveal: ['role', 'company'],\n});\n\nconsole.log('Revealed on overlay, txid:', broadcastResult.txid);",
           code: true
         },
         {
           title: "Revoke a certificate you issued",
           content:
-            "const issued = await wallet.listCertificates({ limit: 1 });\n\nconst revokeResult = await peercert.revoke(issued.certificates[0]);\n\nif (revokeResult.success) {\n  console.log('Certificate revoked, txid:', revokeResult.txid);\n} else {\n  console.error('Revocation failed:', revokeResult.error);\n}",
+            "const issued = await peercert.listCertificates({ limit: 1 });\n\nconst revokeResult = await peercert.revoke(issued[0]);\n\nif (revokeResult.success) {\n  console.log('Certificate revoked, txid:', revokeResult.txid);\n} else {\n  console.error('Revocation failed:', revokeResult.error);\n}",
           code: true
         },
         {
           title: "Check revocation status",
           content:
-            "const status = await peercert.checkRevocation(walletCertificate);\n\nif (status.isRevoked) {\n  console.log('⚠️ Certificate has been revoked');\n  console.log(status.message);\n} else {\n  console.log('✅ Certificate is still valid');\n}",
+            "const status = await peercert.checkRevocation(walletCertificate);\n\nif (status.status === 'valid') {\n  console.log('✅ Certificate is still valid');\n} else if (status.status === 'revoked') {\n  console.log('⚠️ Certificate has been revoked');\n} else {\n  // 'unknown': lookup failed — do NOT assume the certificate is valid\n  console.log('❓ Could not check:', status.message);\n}",
           code: true
         }
       ]
@@ -160,7 +160,7 @@ const docSections = [
         {
           title: "Compact certificate format",
           content:
-            "import { PeerCert } from 'peercert';\n\n// masterCert is a MasterCertificate from peercert.issue()\nconst compact = PeerCert.encodeCertificate(masterCert, 'base64');\n// Example: 'AQdteXBlTm...' (~50–70% smaller than JSON)\n\n// Later, decode back to certificate data\nconst certData = PeerCert.decodeCertificate(compact, 'base64');\n\n// Receive the decoded certificate\nawait peercert.receive(JSON.stringify(certData));",
+            "import { PeerCert } from 'peercert';\n\n// masterCert is a MasterCertificate from peercert.issue()\nconst compact = PeerCert.encodeCertificate(masterCert);\n// Example: 'AQdteXBlTm...' (~50–70% smaller than JSON)\n\n// receive() decodes compact codes directly\nawait peercert.receive(compact);\n\n// Or inspect the data first (format is auto-detected)\nconst certData = PeerCert.decodeCertificate(compact);",
           code: true
         },
         {
