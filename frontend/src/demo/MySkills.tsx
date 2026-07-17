@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { RefreshCw, Award, Globe2, EyeOff, Send, ShieldCheck, ShieldAlert, BadgeCheck, Linkedin, Copy, Check, ExternalLink } from 'lucide-react'
 import type { RevocationStatus } from 'peercert'
-import { WalletInterface, WalletCertificate, IdentityClient } from '@bsv/sdk'
+import { WalletInterface, WalletCertificate, IdentityClient, LookupResolver, Transaction } from '@bsv/sdk'
 import { IdentitySearchField, IdentityCard } from '@bsv/identity-react'
 import { cn } from '@/lib/utils'
 import { isSkillCert, splitSkillFields, levelStyle, truncateKey, certTitle, decryptCertFields, normalizeLevel, makePeerCert } from './certs'
@@ -25,9 +25,14 @@ export default function MySkills({ wallet, identityKey, profile, refreshToken, o
   const [error, setError] = useState<string | null>(null)
   // serialNumber → decrypted fields (null = sealed, undefined = still decrypting)
   const [decrypted, setDecrypted] = useState<Record<string, Record<string, string> | null>>({})
-  // serials of certs currently discoverable in public search
-  const [publicSerials, setPublicSerials] = useState<Set<string>>(new Set())
-  // Guards against out-of-order discover responses clobbering newer state
+  // serial → txid of the on-chain revelation token; presence means the cert
+  // is publicly discoverable. Sourced from the ls_identity lookup service
+  // (queried by serial number), NOT wallet.discoverByIdentityKey — discover
+  // is filtered by the user's trusted certifiers, so peer endorsements from
+  // untrusted certifiers would never show as public even after a reveal.
+  const [publicInfo, setPublicInfo] = useState<Record<string, string>>({})
+  const [network, setNetwork] = useState<'mainnet' | 'testnet'>('mainnet')
+  // Guards against out-of-order lookup responses clobbering newer state
   // (including the optimistic updates from make public / make private)
   const publicLookupSeq = useRef(0)
 
@@ -60,17 +65,43 @@ export default function MySkills({ wallet, identityKey, profile, refreshToken, o
           setDecrypted(prev => ({ ...prev, [cert.serialNumber]: fields }))
         })
       })
-      // Check which of these are already publicly discoverable.
-      // The default discover limit is 10, which would wrongly show any
-      // further public certs as private — ask for far more than a profile holds.
-      if (identityKey) {
+      // Check which of these are already publicly revealed by querying the
+      // ls_identity overlay per serial number — the same authoritative source
+      // the SDK uses to find revelation tokens. This also yields each token's
+      // txid so the card can link to the on-chain transaction.
+      {
         const seq = ++publicLookupSeq.current
-        wallet.discoverByIdentityKey({ identityKey, limit: 1000 })
-          .then(disc => {
+        wallet.getNetwork({})
+          .then(async ({ network: net }) => {
+            const preset = net === 'testnet' ? 'testnet' : 'mainnet'
+            setNetwork(preset)
+            const resolver = new LookupResolver({ networkPreset: preset })
+            // Per cert: txid = public, null = definitively not public,
+            // undefined = lookup failed (keep whatever we knew before)
+            const entries = await Promise.all(result.certificates.map(async cert => {
+              try {
+                const answer = await resolver.query({
+                  service: 'ls_identity',
+                  query: { serialNumber: cert.serialNumber }
+                })
+                if (answer.type === 'output-list' && answer.outputs.length > 0) {
+                  const txid = Transaction.fromBEEF(answer.outputs[0].beef).id('hex')
+                  return [cert.serialNumber, txid] as const
+                }
+                return [cert.serialNumber, null] as const
+              } catch {
+                return [cert.serialNumber, undefined] as const
+              }
+            }))
             if (seq !== publicLookupSeq.current) return // stale response
-            setPublicSerials(new Set(
-              (disc.certificates || []).map((c: any) => c.serialNumber)
-            ))
+            setPublicInfo(prev => {
+              const next: Record<string, string> = {}
+              for (const [serial, txid] of entries) {
+                if (txid) next[serial] = txid
+                else if (txid === undefined && prev[serial]) next[serial] = prev[serial]
+              }
+              return next
+            })
           })
           // On failure keep the last known state — resetting to "all private"
           // would invite duplicate reveals of already-public certs
@@ -174,7 +205,8 @@ export default function MySkills({ wallet, identityKey, profile, refreshToken, o
         throw new Error(('description' in result && result.description) || 'Could not publish. Try again.')
       }
       publicLookupSeq.current++ // invalidate any in-flight lookup
-      setPublicSerials(prev => new Set(prev).add(activeCert.serialNumber))
+      // The broadcast txid IS the revelation token's transaction
+      setPublicInfo(prev => ({ ...prev, [activeCert.serialNumber]: result.txid }))
       setModalDone('Done! Anyone can now find and verify these details about you.')
     } catch (err) {
       console.error('Error making endorsement public:', err)
@@ -222,9 +254,9 @@ export default function MySkills({ wallet, identityKey, profile, refreshToken, o
       const identityClient = new IdentityClient(wallet)
       await identityClient.revokeCertificateRevelation(cert.serialNumber)
       publicLookupSeq.current++ // invalidate any in-flight lookup
-      setPublicSerials(prev => {
-        const next = new Set(prev)
-        next.delete(cert.serialNumber)
+      setPublicInfo(prev => {
+        const next = { ...prev }
+        delete next[cert.serialNumber]
         return next
       })
     } catch (err) {
@@ -313,7 +345,11 @@ export default function MySkills({ wallet, identityKey, profile, refreshToken, o
       : { skill: '', level: undefined, note: undefined }
     const status = statuses[cert.serialNumber]
     const isSelfIssued = identityKey != null && cert.certifier === identityKey
-    const isPublic = publicSerials.has(cert.serialNumber)
+    const publicTxid = publicInfo[cert.serialNumber]
+    const isPublic = publicTxid !== undefined
+    const wocUrl = publicTxid
+      ? `https://${network === 'testnet' ? 'test.' : ''}whatsonchain.com/tx/${publicTxid}`
+      : null
 
     return (
       <div key={`${cert.serialNumber}-${index}`} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
@@ -330,10 +366,24 @@ export default function MySkills({ wallet, identityKey, profile, refreshToken, o
                 </span>
               )}
               {isPublic && (
-                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-medium">
-                  <Globe2 className="w-3.5 h-3.5" />
-                  Public
-                </span>
+                wocUrl ? (
+                  <a
+                    href={wocUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    title="View the public reveal transaction on WhatsOnChain"
+                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-medium hover:bg-blue-100 transition-colors"
+                  >
+                    <Globe2 className="w-3.5 h-3.5" />
+                    Public
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
+                ) : (
+                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-medium">
+                    <Globe2 className="w-3.5 h-3.5" />
+                    Public
+                  </span>
+                )
               )}
               <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-medium">
                 <BadgeCheck className="w-3.5 h-3.5" />
@@ -494,6 +544,7 @@ export default function MySkills({ wallet, identityKey, profile, refreshToken, o
           ['Issuer key', cert.certifier],
           ['Your key', cert.subject],
           ['Revocation ref', cert.revocationOutpoint],
+          ...(publicTxid ? [['Public reveal tx', publicTxid] as [string, string]] : []),
           ['Encrypted fields', JSON.stringify(cert.fields)]
         ]} />
       </div>
