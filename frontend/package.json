@@ -13,7 +13,7 @@
   "dependencies": {
     "@bsv/identity-react": "^1.1.14",
     "@bsv/message-box-client": "^2.2.0",
-    "@bsv/sdk": "^2.1.6",
+    "@bsv/sdk": "^2.4.0",
     "@bsv/wallet-toolbox-client": "^2.3.3",
     "@hookform/resolvers": "^3.10.0",
     "@radix-ui/react-accordion": "^1.2.11",
