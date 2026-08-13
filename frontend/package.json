@@ -14,7 +14,7 @@
     "@bsv/identity-react": "^1.1.14",
     "@bsv/message-box-client": "^2.2.0",
     "@bsv/sdk": "^2.4.0",
-    "@bsv/wallet-toolbox-client": "^2.3.3",
+    "@bsv/wallet-toolbox-client": "^2.9.0",
     "@hookform/resolvers": "^3.10.0",
     "@radix-ui/react-accordion": "^1.2.11",
     "@radix-ui/react-alert-dialog": "^1.1.14",
@@ -85,5 +85,8 @@
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.38.0",
     "vite": "^7.2.2"
+  },
+  "overrides": {
+    "@bsv/sdk": "$@bsv/sdk"
   }
 }

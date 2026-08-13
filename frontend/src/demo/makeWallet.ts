@@ -1,6 +1,5 @@
-import { Wallet, WalletSigner, WalletStorageManager, StorageClient, Services } from '@bsv/wallet-toolbox-client'
+import { Wallet, WalletSigner, WalletStorageManager, StorageClient, Services, PrivilegedKeyManager } from '@bsv/wallet-toolbox-client'
 import { WalletClient, WalletInterface, KeyDeriver, PrivateKey } from '@bsv/sdk'
-import { PrivilegedKeyManager } from '@bsv/wallet-toolbox-client/out/src/sdk'
 
 export interface WalletConfig {
   type: 'local' | 'custom'
