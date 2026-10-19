@@ -1,3 +1,4 @@
+import { SKILL_CERT_TYPE } from './certificateTypes'
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { RefreshCw, Award, Globe2, EyeOff, Send, ShieldCheck, ShieldAlert, BadgeCheck, Linkedin, Copy, Check, ExternalLink } from 'lucide-react'
 import type { RevocationStatus } from 'peercert'
@@ -22,6 +23,7 @@ const LINKEDIN_SHARE_URL = 'https://www.linkedin.com/sharing/share-offsite/'
 export default function MySkills({ wallet, identityKey, profile, refreshToken, onVouchClick }: MySkillsProps) {
   const [certificates, setCertificates] = useState<WalletCertificate[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [currentTypeOnly, setCurrentTypeOnly] = useState(false)
   const [error, setError] = useState<string | null>(null)
   // serialNumber → decrypted fields (null = sealed, undefined = still decrypting)
   const [decrypted, setDecrypted] = useState<Record<string, Record<string, string> | null>>({})
@@ -55,7 +57,7 @@ export default function MySkills({ wallet, identityKey, profile, refreshToken, o
     try {
       setIsLoading(true)
       setError(null)
-      const result = await wallet.listCertificates({ certifiers: [], types: [] })
+      const result = await wallet.listCertificates({ certifiers: [], types: currentTypeOnly ? [SKILL_CERT_TYPE] : [] })
       setCertificates(result.certificates)
       setDecrypted({})
       // Field values arrive encrypted; unlock each cert's fields in the
@@ -108,12 +110,14 @@ export default function MySkills({ wallet, identityKey, profile, refreshToken, o
           .catch(() => { })
       }
     } catch (err) {
+      setCertificates([])
+      setDecrypted({})
       console.error('Error loading certificates:', err)
       setError(err instanceof Error ? err.message : 'Could not load your endorsements.')
     } finally {
       setIsLoading(false)
     }
-  }, [wallet, identityKey])
+  }, [wallet, identityKey, currentTypeOnly])
 
   useEffect(() => {
     loadCertificates()
@@ -562,7 +566,9 @@ export default function MySkills({ wallet, identityKey, profile, refreshToken, o
             <p className="text-sm text-gray-500">
               {isLoading
                 ? 'Loading your credentials…'
-                : certificates.length === 0
+                : error
+                  ? 'Your certificates could not be loaded'
+                  : certificates.length === 0
                   ? 'No verified skills or endorsements yet'
                   : `${certificates.length} verified ${certificates.length === 1 ? 'credential' : 'skills & endorsements'} — yours to keep, wherever you go`}
             </p>
@@ -579,12 +585,26 @@ export default function MySkills({ wallet, identityKey, profile, refreshToken, o
       {actionError && <div className="mb-4"><ErrorBanner message={actionError} /></div>}
       {error && <div className="mb-4"><ErrorBanner message={error} /></div>}
 
+      {(error || currentTypeOnly) && (
+        <div className="mb-4 rounded-xl border border-blue-100 bg-blue-50 p-4 text-sm text-gray-700">
+          <p>
+            {currentTypeOnly
+              ? 'Showing the current PeerCert skill type only. Other credentials are excluded.'
+              : 'Older certificates with short type identifiers can prevent the wallet from listing credentials. You can request only the current PeerCert skill type.'}
+            {' '}Legacy certificates need issuer reissuance; changing their signed type would invalidate them.
+          </p>
+          <SecondaryButton onClick={() => setCurrentTypeOnly(value => !value)} disabled={isLoading} className="mt-3">
+            {currentTypeOnly ? 'Show all certificate types' : 'Show current PeerCert skill type only'}
+          </SecondaryButton>
+        </div>
+      )}
+
       {isLoading ? (
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-12 text-center">
           <div className="w-8 h-8 mx-auto border-2 border-blue-200 border-t-blue-600 rounded-full animate-spin mb-3" />
           <p className="text-sm text-gray-500">Loading your endorsements…</p>
         </div>
-      ) : certificates.length === 0 ? (
+      ) : error ? null : certificates.length === 0 ? (
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-12 text-center">
           <Award className="w-12 h-12 text-gray-200 mx-auto mb-3" />
           <p className="font-medium text-gray-700">No endorsements yet</p>

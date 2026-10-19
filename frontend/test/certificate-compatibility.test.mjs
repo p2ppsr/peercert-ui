@@ -1,8 +1,10 @@
+import { PeerCert, assertCertificateType } from 'peercert'
+import { SKILL_CERT_TYPE, endorsementTypeFromName } from '../src/demo/certificateTypes.ts'
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
-import { HTTPWalletJSON, PrivateKey, Utils, WalletClient } from '@bsv/sdk'
+import { HTTPWalletJSON, MasterCertificate, ProtoWallet, PrivateKey, Utils, WalletClient } from '@bsv/sdk'
 
-// Match the existing endorsement identifier in src/demo/certs.ts. Keep its
+// Historical endorsement identifier, no longer used for new issuance. Keep its
 // historical bytes intact: this qualification must not migrate the records.
 const legacyType = Utils.toBase64(Utils.toArray('peercert-skill-endorsement-v001', 'utf8'))
 const canonicalType = Utils.toBase64(Array(32).fill(1))
@@ -64,4 +66,38 @@ test('SDK 3.2.1 rejects a legacy type filter before sending a JSON request', asy
     error => error.code === 6 && /types.*32 bytes/.test(error.message)
   )
   assert.equal(requests.length, 0)
+})
+
+test('new default and custom schema names produce stable canonical 32-byte types', () => {
+  for (const name of ['', 'work', 'example.org/qualification/v1', 'A'.repeat(100), '資格']) {
+    const type = endorsementTypeFromName(name)
+    assertCertificateType(type)
+    assert.equal(Utils.toArray(type, 'base64').length, 32)
+    assert.equal(type, endorsementTypeFromName(name))
+  }
+  assert.equal(endorsementTypeFromName(''), SKILL_CERT_TYPE)
+  assert.equal(SKILL_CERT_TYPE, 'IquX7sgfOFEgE0K9I213atYLo331ZW1wiqjMg0RtKs4=')
+  assert.notEqual(SKILL_CERT_TYPE, legacyType)
+})
+
+test('the packaged library signs, compact-round-trips and verifies new website types', async () => {
+  const issuer = new ProtoWallet(new PrivateKey(2))
+  const subject = new PrivateKey(3).toPublicKey().toString()
+  const type = endorsementTypeFromName('work')
+  const cert = await MasterCertificate.issueCertificateForSubject(
+    issuer, subject, { skill: 'TypeScript' }, type, async () => `${'ab'.repeat(32)}.0`
+  )
+  assert.equal(await cert.verify(), true)
+  const decoded = PeerCert.decodeCertificate(PeerCert.encodeCertificate(cert))
+  assert.equal(decoded.type, type)
+  const restored = new MasterCertificate(decoded.type, decoded.serialNumber, decoded.subject,
+    decoded.certifier, decoded.revocationOutpoint, decoded.fields, decoded.masterKeyring, decoded.signature)
+  assert.equal(await restored.verify(), true)
+})
+
+test('an explicit current-type filter is valid with the strict wallet client', async () => {
+  const { wallet, requests } = fixtureWallet([certificate(SKILL_CERT_TYPE)])
+  const result = await wallet.listCertificates({ certifiers: [], types: [SKILL_CERT_TYPE] })
+  assert.equal(result.certificates.length, 1)
+  assert.deepEqual(requests[0].args.types, [SKILL_CERT_TYPE])
 })

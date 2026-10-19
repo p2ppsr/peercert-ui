@@ -9,16 +9,9 @@ import {
   VerifiableCertificate,
   ProtoWallet
 } from '@bsv/sdk'
-import { PeerCert } from 'peercert'
-
-// Well-known certificate type for skill endorsements issued by this app.
-// A fixed base64 identifier (31 bytes of label text) so every PeerCert user
-// finds each other's endorsements under the same type. peercert passes valid
-// base64 types through unchanged, so this exact value is preserved on-chain —
-// do not change it, or existing endorsements become undiscoverable.
-export const SKILL_CERT_TYPE = Utils.toBase64(
-  Utils.toArray('peercert-skill-endorsement-v001', 'utf8')
-)
+import { PeerCert, assertCertificateType } from 'peercert'
+import { SKILL_CERT_TYPE } from './certificateTypes'
+export { SKILL_CERT_TYPE } from './certificateTypes'
 
 export const SKILL_LEVELS = ['Beginner', 'Intermediate', 'Advanced', 'Expert'] as const
 export type SkillLevel = (typeof SKILL_LEVELS)[number]
@@ -104,6 +97,7 @@ export function humanizeLabel(label: string): string {
 
 /** Human title for a certificate card, derived from its (base64) type. */
 export function certTitle(type: string): string {
+  if (type === SKILL_CERT_TYPE) return 'Skill endorsement'
   const label = decodeCertTypeLabel(type)
   // Random identifiers (UUIDs, hashes) make meaningless titles
   if (!label || /^[0-9a-f-]{20,}$/i.test(label)) return 'Endorsement'
@@ -192,6 +186,7 @@ export async function searchRevealedCerts(
       const decoded = PushDrop.decode(tx.outputs[output.outputIndex].lockingScript)
       const data = JSON.parse(Utils.toUTF8(decoded.fields[0]))
       if (!data.serialNumber || seen.has(data.serialNumber)) continue
+      assertCertificateType(data.type)
       const cert = new VerifiableCertificate(
         data.type,
         data.serialNumber,
@@ -202,8 +197,8 @@ export async function searchRevealedCerts(
         data.keyring,
         data.signature
       )
+      if (await cert.verify() !== true) continue
       const decryptedFields = await cert.decryptFields(anyone)
-      await cert.verify()
       seen.add(data.serialNumber)
       results.push({
         type: data.type ?? '',

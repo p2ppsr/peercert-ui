@@ -1,0 +1,9 @@
+{
+  "package": "peercert",
+  "version": "0.3.0",
+  "source": "https://github.com/p2ppsr/peercert",
+  "commit": "4b64306a3364a9d258e13a5339f4e254efa01fbd",
+  "sha256": "5d82f48b5d1a69785fe275cfbeb639f53f9395424c6095185eb2bb00993c6566",
+  "build": "npm ci --ignore-scripts && npm test -- --runInBand && npm run build && npm pack",
+  "registryPublication": "pending npm authentication; archive used for a reproducible website release"
+}

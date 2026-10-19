@@ -1,10 +1,11 @@
+import { endorsementTypeFromName } from './certificateTypes'
 import { useState } from 'react'
 import { Copy, Check, ChevronDown, ChevronRight, Plus, Trash2, Send, Link2 } from 'lucide-react'
 import { PeerCert } from 'peercert'
-import { WalletInterface, Utils } from '@bsv/sdk'
+import { WalletInterface } from '@bsv/sdk'
 import { IdentitySearchField } from '@bsv/identity-react'
 import { cn } from '@/lib/utils'
-import { SKILL_CERT_TYPE, SKILL_LEVELS, levelStyle, truncateKey, makePeerCert } from './certs'
+import { SKILL_LEVELS, levelStyle, truncateKey, makePeerCert } from './certs'
 import { ErrorBanner, PrimaryButton, KeyAvatar, ProgressBar } from './ui'
 
 interface VouchProps {
@@ -71,9 +72,7 @@ export default function Vouch({ wallet }: VouchProps) {
       if (f.key.trim() && f.value.trim()) fields[f.key.trim()] = f.value.trim()
     }
 
-    const certificateType = customType.trim()
-      ? Utils.toBase64(Utils.toArray(customType.trim(), 'utf8'))
-      : SKILL_CERT_TYPE
+    const certificateType = endorsementTypeFromName(customType)
 
     try {
       setIsSending(true)
@@ -332,12 +331,12 @@ export default function Vouch({ wallet }: VouchProps) {
                 </div>
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1.5">Custom certificate type</label>
+                <label className="block text-xs font-medium text-gray-600 mb-1.5">Custom certificate schema name</label>
                 <input
                   type="text"
                   value={customType}
                   onChange={e => setCustomType(e.target.value)}
-                  placeholder="Leave empty for the standard skill endorsement type"
+                  placeholder="e.g. example.org/qualification/v1 (optional)"
                   className="w-full px-3 py-1.5 border border-gray-200 rounded-lg text-sm font-mono focus:ring-2 focus:ring-blue-500 outline-none"
                 />
               </div>

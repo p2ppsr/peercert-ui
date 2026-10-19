@@ -178,12 +178,17 @@ refresh My Certificates. A wallet containing only canonical certificates is a
 control; reproducing the legacy failure requires a wallet that already holds a
 short-type certificate. Do not delete or replace certificates during the test.
 
-The existing skill-endorsement identifier encodes
-`peercert-skill-endorsement-v001` (31 bytes). It is deliberately unchanged for
-this qualification. SDK 3.2.1 also rejects new issuance/signing under that type;
-this upgrade does not provide a certificate migration or claim that the full
-issuance journey is compatible. Upgrading to a future SDK with PR #1100 would
-require revisiting the expectations above.
+New skill endorsements use `base64(SHA-256('peercert.io/skill-endorsement/v1'))`,
+which is exactly 32 decoded bytes. Custom schema names are hashed explicitly,
+including ambiguous names such as `work`. The old 31-byte identifier is retained
+only in synthetic regression tests. Legacy signed records are not changed;
+issuers must reissue them under a conforming type. My Certificates reports list
+errors without claiming there are no certificates and offers an explicit current
+PeerCert skill type filter, clearly excluding other credentials.
+
+The website consumes the tested `peercert@0.3.0` archive in `frontend/vendor/`
+until npm publication is available. Its provenance file records source and
+checksum. Do not replace it with a similarly named unverified registry release.
 
 ### Project Structure (CARS)
 

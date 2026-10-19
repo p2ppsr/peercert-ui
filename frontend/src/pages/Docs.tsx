@@ -58,7 +58,7 @@ const docSections = [
         {
           title: "Auto-send via MessageBox",
           content:
-            "import { PeerCert } from 'peercert';\n\nconst peercert = new PeerCert();\n\nawait peercert.issue({\n  certificateType: 'employment', // names are normalized automatically\n  subjectIdentityKey: '03abc123...', // recipient identity key\n  fields: {\n    role: 'Engineer',\n    company: 'ACME Corp',\n    start_date: '2024-01-15',\n  },\n  autoSend: true, // automatically sends via MessageBox\n});",
+            "import { PeerCert } from 'peercert';\n\nconst peercert = new PeerCert();\n\nawait peercert.issue({\n  certificateType: PeerCert.certificateTypeFromName('example.org/employment/v1'), // exactly 32 bytes\n  subjectIdentityKey: '03abc123...', // recipient identity key\n  fields: {\n    role: 'Engineer',\n    company: 'ACME Corp',\n    start_date: '2024-01-15',\n  },\n  autoSend: true, // automatically sends via MessageBox\n});",
           code: true
         }
       ]
