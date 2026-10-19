@@ -28,6 +28,12 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Qualify frontend certificate compatibility
+        run: |
+          npm ci --prefix frontend --ignore-scripts
+          npm run test:certificate-compatibility --prefix frontend
+          npm exec --prefix frontend -- tsc --project frontend/tsconfig.app.json --noEmit
+
       - name: Build CARS artifact
         run: npm run build
 

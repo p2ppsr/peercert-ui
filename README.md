@@ -160,6 +160,31 @@ Certificates are sent as JSON messages:
 
 ## Development
 
+### SDK 3.2.1 certificate compatibility qualification
+
+The frontend pins `@bsv/sdk` to the published `3.2.1` release, with the existing
+frontend override keeping its dependencies on the same SDK. This release does
+not contain ts-stack PR #1100's legacy certificate compatibility fix.
+
+Run `npm run test:certificate-compatibility --prefix frontend` to exercise the
+same unfiltered JSON `listCertificates({ certifiers: [], types: [] })` request
+used by My Certificates. Synthetic responses demonstrate that canonical
+32-byte types succeed, while one 31-byte legacy type rejects the entire result.
+A legacy type filter is rejected before the wallet receives the request.
+These tests do not access a real wallet, issue certificates, or modify storage.
+
+For the live check, open `/demo`, connect the existing desktop wallet, and
+refresh My Certificates. A wallet containing only canonical certificates is a
+control; reproducing the legacy failure requires a wallet that already holds a
+short-type certificate. Do not delete or replace certificates during the test.
+
+The existing skill-endorsement identifier encodes
+`peercert-skill-endorsement-v001` (31 bytes). It is deliberately unchanged for
+this qualification. SDK 3.2.1 also rejects new issuance/signing under that type;
+this upgrade does not provide a certificate migration or claim that the full
+issuance journey is compatible. Upgrading to a future SDK with PR #1100 would
+require revisiting the expectations above.
+
 ### Project Structure (CARS)
 
 ```
