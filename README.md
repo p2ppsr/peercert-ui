@@ -167,9 +167,10 @@ frontend override keeping its dependencies on the same SDK. This release does
 not contain ts-stack PR #1100's legacy certificate compatibility fix.
 
 Run `npm run test:certificate-compatibility --prefix frontend` to exercise the
-same unfiltered JSON `listCertificates({ certifiers: [], types: [] })` request
-used by My Certificates. Synthetic responses demonstrate that canonical
-32-byte types succeed, while one 31-byte legacy type rejects the entire result.
+same unfiltered `listCertificates({ certifiers: [], types: [] })` arguments
+used by My Certificates through synthetic JSON fixtures. The responses show
+that canonical 32-byte types succeed, while one 31-byte legacy type rejects
+the entire result.
 A legacy type filter is rejected before the wallet receives the request.
 These tests do not access a real wallet, issue certificates, or modify storage.
 
@@ -189,6 +190,21 @@ PeerCert skill type filter, clearly excluding other credentials.
 The website consumes the tested `peercert@0.3.0` archive in `frontend/vendor/`
 until npm publication is available. Its provenance file records source and
 checksum. Do not replace it with a similarly named unverified registry release.
+
+### Local wallet transport
+
+The normal connect button uses `new WalletClient()` with SDK auto discovery.
+An injected `window.CWI` wallet has first priority, followed by binary HTTP at
+`http://localhost:3301`, secure JSON at `https://localhost:2121`, and JSON at
+`http://localhost:3321`; other supported bridges remain SDK-managed fallbacks.
+The app no longer pins JSON as a legacy certificate workaround. If binary is
+unavailable, SDK discovery may select a supported fallback. Once connected,
+a certificate-operation error does not trigger a transport change.
+
+Short legacy types still cannot be represented by the fixed-width binary wire.
+The current PeerCert type filter uses a canonical 32-byte identifier. An
+unfiltered listing containing legacy records can still fail; do not reinterpret
+or rewrite those signed records to make a transport accept them.
 
 ### Project Structure (CARS)
 

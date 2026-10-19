@@ -10,10 +10,8 @@ export interface WalletConfig {
 
 export default async function makeWallet(config: WalletConfig): Promise<WalletInterface> {
   if (config.type === 'local') {
-    // Pin the JSON substrate: the default binary wire assumes spec-compliant
-    // 32-byte certificate types, and legacy certs with other type lengths
-    // come back corrupted (shifted certifier keys, garbled field names)
-    return new WalletClient('json-api')
+    // Use SDK discovery so binary HTTP is preferred over HTTP JSON when available.
+    return new WalletClient()
   }
 
   if (!config.privateKey) {
